@@ -12,6 +12,7 @@ import ProductsPage from './pages/ProductsPage';
 import IndustriesPage from './pages/IndustriesPage';
 import ProjectsPage from './pages/ProjectsPage';
 import ProjectDetailPage from './pages/ProjectDetailPage';
+import CareersPage from './pages/CareersPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
 
@@ -47,6 +48,7 @@ export default function App() {
               <Route path="/industries" element={<IndustriesPage onOpenConsultation={handleOpenConsultation} />} />
               <Route path="/projects" element={<ProjectsPage onOpenConsultation={handleOpenConsultation} />} />
               <Route path="/projects/:slug" element={<ProjectDetailPage onOpenConsultation={handleOpenConsultation} />} />
+              <Route path="/careers" element={<CareersPage onOpenConsultation={handleOpenConsultation} />} />
               <Route path="/about" element={<AboutPage onOpenConsultation={handleOpenConsultation} />} />
               <Route path="/contact" element={<ContactPage />} />
             </Routes>

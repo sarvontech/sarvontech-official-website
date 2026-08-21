@@ -542,3 +542,264 @@ export const WHY_SERVONTECH = [
     desc: "Your digital asset belongs 100% to you. We build scalable systems that expand seamlessly as your business expands."
   }
 ];
+
+export const CAREERS_ROLES = [
+  {
+    id: "frontend-developer",
+    title: "Frontend Developer",
+    department: "Engineering",
+    location: "Pune / Hybrid",
+    employmentType: "Full-Time",
+    experience: "1–3 Years / Fresh Talent",
+    tags: ["React.js", "JavaScript", "CSS", "Tailwind"],
+    summary: "Build high-speed, responsive web applications, interactive story journeys, and administrative dashboards for real businesses.",
+    whatYoullDo: [
+      "Develop modular, high-performance React components using Vite, Tailwind CSS, and JavaScript.",
+      "Translate wireframes and product specs into intuitive, mobile-first user interfaces.",
+      "Integrate RESTful APIs and state management for real-time dashboard updates.",
+      "Optimize web assets and components for sub-1.2s page load speeds."
+    ],
+    requirements: [
+      "Solid understanding of HTML5, CSS3, modern JavaScript (ES6+), and React fundamentals.",
+      "Experience with responsive layout design and component-driven architecture.",
+      "Familiarity with Git version control concepts and REST API consumption.",
+      "Strong problem-solving mindset and passion for clean, readable code."
+    ],
+    niceToHave: [
+      "Experience with Tailwind CSS, Vite, or Next.js.",
+      "Understanding of web accessibility (WCAG) and performance profiling.",
+      "Knowledge of TypeScript or animation libraries."
+    ],
+    whatYoullBuild: "Business Web Applications, Booking Engines, and Admin Control Interfaces."
+  },
+  {
+    id: "java-backend-developer",
+    title: "Java Backend Developer",
+    department: "Engineering",
+    location: "Pune / Hybrid",
+    employmentType: "Full-Time",
+    experience: "1–4 Years / Fresh Talent",
+    tags: ["Java", "Spring Boot", "MySQL", "REST APIs"],
+    summary: "Architect robust server-side APIs, database schemas, and background transaction workflows for business systems.",
+    whatYoullDo: [
+      "Design and implement RESTful web services and backend APIs using Java and Spring Boot.",
+      "Architect clean relational database schemas in MySQL/PostgreSQL with optimized query performance.",
+      "Implement secure authentication, role-based access control (RBAC), and data validation layers.",
+      "Integrate third-party messaging services (WhatsApp API, SMS, Email dispatches)."
+    ],
+    requirements: [
+      "Strong proficiency in Java, Object-Oriented Programming (OOP), and Spring Boot fundamentals.",
+      "Experience writing relational SQL queries and ORM mappings (Hibernate/JPA).",
+      "Understanding of RESTful API architecture and HTTP protocol standards.",
+      "Good debugging, logging, and problem-solving capabilities."
+    ],
+    niceToHave: [
+      "Experience with Docker, Redis caching, or message queues.",
+      "Knowledge of microservices architecture or cloud deployment."
+    ],
+    whatYoullBuild: "Enterprise Lead Routing Engines, Booking Synchronization Servers, and Secure Data APIs."
+  },
+  {
+    id: "ai-automation-developer",
+    title: "AI / Automation Developer",
+    department: "AI & Innovation",
+    location: "Pune / Hybrid",
+    employmentType: "Full-Time",
+    experience: "1–3 Years / Fresh Talent",
+    tags: ["Python", "APIs", "LLMs", "Automation"],
+    summary: "Engineer intelligent AI assistants, automated lead qualification bots, and cross-system data pipeline integrations.",
+    whatYoullDo: [
+      "Build custom automation bots and workflow scripts using Python, Node.js, and webhooks.",
+      "Integrate Large Language Model (LLM) APIs to automate customer inquiry handling and lead scoring.",
+      "Connect disparate business tools (CRMs, messaging channels, portals) into unified data streams.",
+      "Monitor bot accuracy, response latency, and exception handling logic."
+    ],
+    requirements: [
+      "Proficiency in Python or JavaScript/TypeScript for scripting and automation.",
+      "Hands-on experience consuming REST APIs, webhooks, and JSON data payloads.",
+      "Curiosity about AI models, prompt engineering, and LLM API integrations.",
+      "Analytical mindset focused on eliminating manual operational effort."
+    ],
+    niceToHave: [
+      "Experience with WhatsApp Business API, LangChain, or automation tools (n8n/Make).",
+      "Understanding of vector databases or RAG architectures."
+    ],
+    whatYoullBuild: "24/7 AI Lead Qualification Bots, Automated WhatsApp Reminders, and Workflow Systems."
+  },
+  {
+    id: "ui-ux-designer",
+    title: "UI/UX Designer",
+    department: "Design",
+    location: "Pune / Hybrid",
+    employmentType: "Full-Time",
+    experience: "1–3 Years",
+    tags: ["Figma", "Product Design", "Design Systems"],
+    summary: "Craft intuitive, practical digital interfaces, interactive user journeys, and cohesive design systems for web and mobile products.",
+    whatYoullDo: [
+      "Design clean, modern user interfaces for web platforms, mobile apps, and administrative dashboards.",
+      "Create interactive wireframes, prototypes, and design system components in Figma.",
+      "Conduct user workflow research to simplify complex business processes into clear screens.",
+      "Collaborate directly with developers to ensure pixel-perfect, accessible implementation."
+    ],
+    requirements: [
+      "Strong portfolio demonstrating UI/UX design capabilities for digital products.",
+      "Proficiency in Figma, auto-layout, component variants, and design tokens.",
+      "Deep understanding of visual hierarchy, typography, spacing systems, and usability principles.",
+      "Clear communication skills to articulate design decisions."
+    ],
+    niceToHave: [
+      "Basic understanding of HTML/CSS capabilities and mobile-first design.",
+      "Experience creating micro-interactions or UI prototypes."
+    ],
+    whatYoullBuild: "Product Design Systems, Interactive Customer Journeys, and Admin Dashboards."
+  },
+  {
+    id: "fullstack-developer",
+    title: "Full-Stack Developer",
+    department: "Engineering",
+    location: "Pune / Hybrid",
+    employmentType: "Full-Time",
+    experience: "2–5 Years",
+    tags: ["React", "Node.js", "Java", "SQL"],
+    summary: "Own complete end-to-end digital features—from database schema design and API endpoints to responsive frontend components.",
+    whatYoullDo: [
+      "Develop full-stack web applications combining React frontends with Node.js/Java backends.",
+      "Architect relational and document databases with clean data flow contracts.",
+      "Implement real-time synchronization features, data export modules, and security policies.",
+      "Participate in code reviews, technical architecture decisions, and system deployments."
+    ],
+    requirements: [
+      "Hands-on experience across both frontend (React/JS) and backend (Node/Java) stacks.",
+      "Proficiency with SQL/NoSQL databases and API integration patterns.",
+      "Experience deploying and maintaining web applications on cloud servers.",
+      "High level of ownership and ability to take features from concept to production."
+    ],
+    niceToHave: [
+      "Knowledge of Tailwind CSS, Docker, or AWS/Vercel deployments.",
+      "Experience building multi-tenant SaaS or internal business tools."
+    ],
+    whatYoullBuild: "Custom Business Operating Systems, Multi-Store E-Commerce Platforms, and Operations Portals."
+  },
+  {
+    id: "engineering-intern",
+    title: "Engineering Intern / Fresh Talent",
+    department: "Engineering",
+    location: "Pune / Hybrid",
+    employmentType: "Internship / Full-Time Track",
+    experience: "Freshers / Final Year Students",
+    tags: ["Problem Solving", "React", "Java", "Python"],
+    summary: "Join ServonTech's core engineering track to work on real customer projects, learn practical software architecture, and build useful systems.",
+    whatYoullDo: [
+      "Work alongside senior engineers to build real components and features for client platforms.",
+      "Learn modern development practices, Git workflows, clean coding standards, and API integrations.",
+      "Participate in daily problem-solving, code reviews, and product testing sessions.",
+      "Gain hands-on experience shipping code to live production environments."
+    ],
+    requirements: [
+      "Strong computer science fundamentals (data structures, algorithms, object-oriented concepts).",
+      "Basic hands-on experience with at least one programming stack (React/JavaScript, Java, or Python).",
+      "High curiosity, eagerness to learn, and passion for building functional software.",
+      "Good verbal and written technical communication skills."
+    ],
+    niceToHave: [
+      "Personal coding projects, GitHub repository showcases, or hackathon participation.",
+      "Familiarity with web technologies (HTML, CSS, JS, REST APIs)."
+    ],
+    whatYoullBuild: "Real Business Web Modules, Interactive Product Features, and Automation Scripts."
+  }
+];
+
+export const WORK_DOMAINS = [
+  {
+    num: "01",
+    title: "AI & Automation",
+    desc: "Build AI-powered assistants, workflow automation bots, and intelligent business tools that save real human hours.",
+    icon: "Cpu"
+  },
+  {
+    num: "02",
+    title: "Business Platforms",
+    desc: "Build custom CRMs, executive dashboards, admin control systems, and internal operational software.",
+    icon: "Database"
+  },
+  {
+    num: "03",
+    title: "Healthcare Technology",
+    desc: "Build doctor search engines, 24/7 appointment scheduling systems, and clinic roster management dashboards.",
+    icon: "Stethoscope"
+  },
+  {
+    num: "04",
+    title: "Real Estate Technology",
+    desc: "Build omnichannel lead ingestion engines, automated qualification bots, and site-visit tracking CRMs.",
+    icon: "Building2"
+  },
+  {
+    num: "05",
+    title: "E-Commerce Systems",
+    desc: "Build multi-store inventory control platforms, real-time POS stock sync, and order management tools.",
+    icon: "Box"
+  },
+  {
+    num: "06",
+    title: "Digital Experiences",
+    desc: "Build high-performance, mobile-first business websites and institutional portals engineered for trust and conversion.",
+    icon: "Globe"
+  }
+];
+
+export const ENGINEERING_VALUES = [
+  {
+    num: "01",
+    title: "OWN THE PROBLEM",
+    desc: "Don't wait for perfect instructions. Understand the business problem, investigate the context, and propose a better solution."
+  },
+  {
+    num: "02",
+    title: "BUILD FOR THE USER",
+    desc: "Technology is valuable only when real people can actually use it without friction or confusion."
+  },
+  {
+    num: "03",
+    title: "KEEP LEARNING",
+    desc: "Technology changes quickly. We value curiosity, self-driven experimentation, and continuous technical improvement."
+  },
+  {
+    num: "04",
+    title: "SIMPLIFY",
+    desc: "Prefer simple, practical code and architecture that solves real problems over overly complex over-engineering."
+  },
+  {
+    num: "05",
+    title: "TAKE RESPONSIBILITY",
+    desc: "Own what you build from initial concept and UI logic all the way to live production testing and improvement."
+  },
+  {
+    num: "06",
+    title: "USE AI INTELLIGENTLY",
+    desc: "AI is a powerful tool to accelerate research, development, and outcomes—not a substitute for engineering judgment."
+  }
+];
+
+export const CAREER_GROWTH_STEPS = [
+  { step: "01", title: "JOIN", desc: "Start with clear expectations, direct mentoring, and real project context." },
+  { step: "02", title: "LEARN", desc: "Master modern frameworks, practical architecture, and business-first problem solving." },
+  { step: "03", title: "BUILD", desc: "Ship real features, modules, and products that operate in live production." },
+  { step: "04", title: "OWN", desc: "Take end-to-end responsibility for entire systems, architecture decisions, and client outcomes." },
+  { step: "05", title: "LEAD", desc: "Guide projects, mentor new team members, and help shape ServonTech's technology roadmap." }
+];
+
+export const TECH_STACK_ITEMS = [
+  { name: "React", category: "Frontend" },
+  { name: "JavaScript", category: "Language" },
+  { name: "TypeScript", category: "Language" },
+  { name: "Java", category: "Backend" },
+  { name: "Spring Boot", category: "Backend" },
+  { name: "Node.js", category: "Backend" },
+  { name: "MySQL", category: "Database" },
+  { name: "REST APIs", category: "Architecture" },
+  { name: "AI / LLM APIs", category: "Automation" },
+  { name: "Tailwind CSS", category: "Styling" },
+  { name: "Vite", category: "Tooling" },
+  { name: "Git", category: "Version Control" }
+];

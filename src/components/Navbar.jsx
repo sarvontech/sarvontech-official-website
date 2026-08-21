@@ -120,6 +120,17 @@ export default function Navbar({ onOpenConsultation }) {
             </Link>
 
             <Link 
+              to="/careers" 
+              className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                isActive('/careers') 
+                  ? 'text-[var(--color-brand)] bg-[var(--color-brand-light)] font-semibold' 
+                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
+              }`}
+            >
+              Careers
+            </Link>
+
+            <Link 
               to="/about" 
               className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                 isActive('/about') 
@@ -196,13 +207,16 @@ export default function Navbar({ onOpenConsultation }) {
               Services
             </Link>
             <Link to="/products" onClick={() => setMobileMenuOpen(false)} className={`block px-3 py-2 text-sm rounded-lg ${isActive('/products') ? 'text-[var(--color-brand)] font-bold bg-[var(--color-brand-light)]' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}`}>
-              Products We're Building
+              Products
             </Link>
             <Link to="/industries" onClick={() => setMobileMenuOpen(false)} className={`block px-3 py-2 text-sm rounded-lg ${isActive('/industries') ? 'text-[var(--color-brand)] font-bold bg-[var(--color-brand-light)]' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}`}>
               Industries
             </Link>
             <Link to="/projects" onClick={() => setMobileMenuOpen(false)} className={`block px-3 py-2 text-sm rounded-lg ${isActive('/projects') ? 'text-[var(--color-brand)] font-bold bg-[var(--color-brand-light)]' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}`}>
-              Selected Work / Projects
+              Projects
+            </Link>
+            <Link to="/careers" onClick={() => setMobileMenuOpen(false)} className={`block px-3 py-2 text-sm rounded-lg ${isActive('/careers') ? 'text-[var(--color-brand)] font-bold bg-[var(--color-brand-light)]' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}`}>
+              Careers
             </Link>
             <Link to="/about" onClick={() => setMobileMenuOpen(false)} className={`block px-3 py-2 text-sm rounded-lg ${isActive('/about') ? 'text-[var(--color-brand)] font-bold bg-[var(--color-brand-light)]' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}`}>
               About

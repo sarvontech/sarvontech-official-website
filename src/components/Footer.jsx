@@ -72,6 +72,7 @@ export default function Footer({ onOpenConsultation }) {
             <ul className="space-y-2">
               <li><Link to="/projects" className="hover:text-[var(--color-brand)] transition-colors">Selected Work & Case Studies</Link></li>
               <li><Link to="/industries" className="hover:text-[var(--color-brand)] transition-colors">Industries We Serve</Link></li>
+              <li><Link to="/careers" className="hover:text-[var(--color-brand)] transition-colors">Careers & Hiring</Link></li>
               <li><Link to="/about" className="hover:text-[var(--color-brand)] transition-colors">About Sarvon Tech</Link></li>
               <li><Link to="/contact" className="hover:text-[var(--color-brand)] transition-colors">Contact & Let's Talk</Link></li>
             </ul>
@@ -85,6 +86,7 @@ export default function Footer({ onOpenConsultation }) {
             © {new Date().getFullYear()} Sarvon Tech Digital Solutions & Products. All rights reserved.
           </div>
           <div className="flex items-center gap-6">
+            <Link to="/careers" className="hover:text-[var(--color-brand)] transition-colors">Careers</Link>
             <Link to="/about" className="hover:text-[var(--color-brand)] transition-colors">Philosophy</Link>
             <Link to="/contact" className="hover:text-[var(--color-brand)] transition-colors">Contact</Link>
           </div>
