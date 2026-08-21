@@ -1,0 +1,164 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root,
+[data-theme="light"] {
+  --color-bg-primary: #F4F3EE;
+  --color-bg-secondary: #FCFBF7;
+  --color-bg-tertiary: #EAF5F0;
+  --color-bg-footer: #EEF0EB;
+
+  --color-surface: #FCFBF7;
+  --color-surface-hover: #F7F8F4;
+  --color-surface-glass: rgba(252, 251, 247, 0.88);
+  --color-surface-card: #FCFBF7;
+
+  --color-text-primary: #172126;
+  --color-text-secondary: #526268;
+  --color-text-muted: #718087;
+  --color-text-inverse: #FFFFFF;
+
+  --color-brand: #075E67;
+  --color-brand-hover: #064A52;
+  --color-brand-light: #EAF5F0;
+
+  --color-accent-lime: #B8D83D;
+  --color-accent-lime-hover: #A5C432;
+  --color-accent-mint: #36BFA6;
+  --color-accent-soft: #EAF5F0;
+
+  --color-border: #DDE2DE;
+  --color-border-subtle: rgba(221, 226, 222, 0.6);
+  --color-border-hover: #075E67;
+
+  --color-shadow: rgba(23, 33, 38, 0.06);
+
+  --color-card-problem-bg: #FDF2F2;
+  --color-card-problem-border: #FECACA;
+  --color-card-problem-text: #991B1B;
+
+  --color-card-solution-bg: #EAF5F0;
+  --color-card-solution-border: #A7F3D0;
+  --color-card-solution-text: #065F46;
+
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --color-bg-primary: #0B0F19;
+  --color-bg-secondary: #111827;
+  --color-bg-tertiary: #1F2937;
+  --color-bg-footer: #070A11;
+
+  --color-surface: #111827;
+  --color-surface-hover: #1F2937;
+  --color-surface-glass: rgba(11, 15, 25, 0.88);
+  --color-surface-card: rgba(17, 24, 39, 0.7);
+
+  --color-text-primary: #F9FAFB;
+  --color-text-secondary: #9CA3AF;
+  --color-text-muted: #6B7280;
+  --color-text-inverse: #172126;
+
+  --color-brand: #0EA5E9;
+  --color-brand-hover: #0284C7;
+  --color-brand-light: rgba(14, 165, 233, 0.1);
+
+  --color-accent-lime: #10B981;
+  --color-accent-lime-hover: #059669;
+  --color-accent-mint: #36BFA6;
+  --color-accent-soft: rgba(16, 185, 129, 0.1);
+
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-subtle: rgba(255, 255, 255, 0.05);
+  --color-border-hover: rgba(14, 165, 233, 0.4);
+
+  --color-shadow: rgba(0, 0, 0, 0.4);
+
+  --color-card-problem-bg: rgba(239, 68, 68, 0.1);
+  --color-card-problem-border: rgba(239, 68, 68, 0.2);
+  --color-card-problem-text: #FCA5A5;
+
+  --color-card-solution-bg: rgba(16, 185, 129, 0.1);
+  --color-card-solution-border: rgba(16, 185, 129, 0.2);
+  --color-card-solution-text: #6EE7B7;
+
+  color-scheme: dark;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+    transition: background-color 200ms ease, color 200ms ease;
+  }
+
+  *, ::before, ::after {
+    transition: background-color 200ms ease, border-color 200ms ease, color 200ms ease, fill 200ms ease, stroke 200ms ease;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    transition-duration: 0ms !important;
+    animation-duration: 0ms !important;
+  }
+}
+
+/* Custom Utilities for Sarvon Tech */
+.glass-panel {
+  background: var(--color-surface-glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-border);
+}
+
+.glass-card {
+  background: var(--color-surface-card);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 20px var(--color-shadow);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-card:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-hover);
+  box-shadow: 0 8px 30px var(--color-shadow);
+  transform: translateY(-2px);
+}
+
+.glow-pill {
+  box-shadow: 0 0 15px var(--color-brand-light);
+}
+
+/* Location Pin Grow/Shrink Pulse Animation */
+@keyframes pinGrowShrink {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.18);
+  }
+}
+
+.animate-pin-grow-shrink {
+  animation: pinGrowShrink 2.2s infinite ease-in-out;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-brand);
+}
