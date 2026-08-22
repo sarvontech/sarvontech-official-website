@@ -27,10 +27,10 @@ export default function Footer({ onOpenConsultation }) {
             </p>
 
             <div className="text-xs space-y-1.5 pt-2">
-              <div className="flex items-center gap-2 text-[var(--color-text-secondary)]">
+              <a href="mailto:sarvon.tech@gmail.com" className="flex items-center gap-2 text-[var(--color-text-secondary)] hover:text-[var(--color-brand)] transition-colors">
                 <Mail className="w-4 h-4 text-[var(--color-brand)]" />
-                <span>contact@sarvontech.com</span>
-              </div>
+                <span>sarvon.tech@gmail.com</span>
+              </a>
               <div className="flex items-center gap-2 text-[var(--color-text-secondary)]">
                 <Phone className="w-4 h-4 text-[var(--color-accent-mint)]" />
                 <span>+91 98348 57370</span>
