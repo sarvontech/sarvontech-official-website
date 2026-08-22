@@ -52,7 +52,9 @@ export default function ContactPage() {
                   </div>
                   <div>
                     <div className="text-[var(--color-text-muted)] font-mono">EMAIL US</div>
-                    <div className="text-[var(--color-text-primary)] font-semibold">contact@sarvontech.com</div>
+                    <a href="mailto:sarvon.tech@gmail.com" className="text-[var(--color-text-primary)] hover:text-[var(--color-brand)] font-semibold transition-colors block">
+                      sarvon.tech@gmail.com
+                    </a>
                   </div>
                 </div>
 
