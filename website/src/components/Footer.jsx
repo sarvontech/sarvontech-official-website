@@ -12,9 +12,9 @@ export default function Footer({ onOpenConsultation }) {
           {/* Brand Info */}
           <div className="lg:col-span-2 space-y-4">
             <Link to="/" className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[var(--color-brand)] to-[var(--color-accent-mint)] p-0.5 shadow-md">
-                <div className="w-full h-full bg-[var(--color-bg-primary)] rounded-[10px] flex items-center justify-center">
-                  <Layers className="w-5 h-5 text-[var(--color-brand)]" />
+              <div className="w-11 h-11 rounded-xl bg-gradient-to-tr from-[var(--color-brand)] to-[var(--color-accent-mint)] p-0.5 shadow-md">
+                <div className="w-full h-full bg-[var(--color-bg-primary)] rounded-[10px] flex items-center justify-center overflow-hidden p-0.5">
+                  <img src="/assets/images/logo-remove-bg.png" alt="Sarvon Tech Logo" className="w-full h-full object-contain" />
                 </div>
               </div>
               <span className="text-xl font-bold tracking-tight text-[var(--color-text-primary)] font-sans">

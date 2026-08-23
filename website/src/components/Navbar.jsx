@@ -36,9 +36,9 @@ export default function Navbar({ onOpenConsultation }) {
           
           {/* Logo - Returns Home */}
           <Link to="/" className="flex items-center gap-3 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[var(--color-brand)] to-[var(--color-accent-mint)] p-0.5 shadow-lg group-hover:scale-105 transition-transform duration-300">
-              <div className="w-full h-full bg-[var(--color-bg-primary)] rounded-[10px] flex items-center justify-center">
-                <Layers className="w-5 h-5 text-[var(--color-brand)]" />
+            <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-gradient-to-tr from-[var(--color-brand)] to-[var(--color-accent-mint)] p-0.5 shadow-lg group-hover:scale-105 transition-transform duration-300">
+              <div className="w-full h-full bg-[var(--color-bg-primary)] rounded-[10px] flex items-center justify-center overflow-hidden p-0.5">
+                <img src="/assets/images/logo-remove-bg.png" alt="Sarvon Tech Logo" className="w-full h-full object-contain" />
               </div>
             </div>
             <div className="flex flex-col">
