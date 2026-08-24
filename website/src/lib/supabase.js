@@ -1,4 +1,4 @@
-import { createClient } from '@supabase/supabase-js';
+import { supabase, isSupabaseConfigured } from './supabaseClient';
 import { 
   PROJECTS_DATA, 
   SERVICES_CATEGORIES, 
@@ -8,10 +8,7 @@ import {
   CAREERS_ROLES 
 } from '../data/servonData';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://mlmyvdcjwlrjgvalvfyy.supabase.co';
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || '';
-
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export { supabase, isSupabaseConfigured };
 
 /**
  * 1. Fetch Projects with fallback to static servonData.js
