@@ -20,7 +20,7 @@ export default function IndustriesPage({ onOpenConsultation }) {
     <div className="pt-28 pb-20 bg-[var(--color-bg-primary)] transition-colors duration-200">
       <SEOHead 
         title="Industry Solutions & Sector Systems" 
-        description="Discover custom digital solutions for Real Estate, Healthcare, Education, Retail, Manufacturing, and Organizations."
+        description="Discover custom digital solutions for Education, Healthcare, Retail, Manufacturing, and Spiritual Organizations."
       />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">

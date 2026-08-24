@@ -29,9 +29,9 @@ export default function ServicesPage({ onOpenConsultation }) {
       desc: "Update schedules, pricing, and content directly without paying a developer for routine edits."
     },
     {
-      beforeTitle: "Scattered Inquiries & Lost Leads",
-      afterTitle: "Centralized Automated CRM",
-      desc: "Capture every lead from Meta, Google, WhatsApp, and portals into an organized sales pipeline."
+      beforeTitle: "Scattered Records & Manual Registers",
+      afterTitle: "Centralized School ERP System",
+      desc: "Unify admissions, student fees, attendance, report cards, and parent communication into one platform."
     },
     {
       beforeTitle: "Phone Bottlenecks & No-Shows",
@@ -72,7 +72,7 @@ export default function ServicesPage({ onOpenConsultation }) {
     <div className="pt-28 pb-20 bg-[var(--color-bg-primary)] transition-colors duration-200">
       <SEOHead 
         title="Digital Services & Business Solutions | SarvonTech" 
-        description="ServonTech builds websites, custom software, CRMs, booking platforms, e-commerce systems and AI-powered digital solutions tailored to the way your business works."
+        description="ServonTech builds websites, custom software, School ERPs, booking platforms, e-commerce systems and AI-powered digital solutions tailored to the way your business works."
       />
 
       {/* SERVICES OVERVIEW SECTION (VISUAL-FIRST CARDS) */}

@@ -30,10 +30,10 @@ export default function AboutPage({ onOpenConsultation }) {
         <div className="glass-card rounded-3xl p-8 sm:p-12 border border-[var(--color-border)] space-y-6 max-w-4xl mx-auto text-sm text-[var(--color-text-secondary)] leading-relaxed shadow-xl">
           <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">Our Engineering Philosophy</h2>
           <p>
-            We believe technology should serve business goals—not the other way around. Most companies don't need buzzword-heavy marketing; they need reliable digital presence, organized lead management, and automated operational workflows.
+            We believe technology should serve business goals—not the other way around. Most companies don't need buzzword-heavy marketing; they need reliable digital presence, organized administrative workflows, and automated operational processes.
           </p>
           <p>
-            Whether we are designing a modern web portal for an academic institution, building a custom real-estate CRM, or developing AI booking assistants, our focus remains unchanged: <strong className="text-[var(--color-text-primary)]">clarity, speed, and real business value.</strong>
+            Whether we are designing a modern web portal for an academic institution, building a School ERP platform, or developing AI booking assistants, our focus remains unchanged: <strong className="text-[var(--color-text-primary)]">clarity, speed, and real business value.</strong>
           </p>
         </div>
 

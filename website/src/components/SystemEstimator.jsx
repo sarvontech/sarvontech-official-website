@@ -5,21 +5,20 @@ import RevealOnScroll from './RevealOnScroll';
 export default function SystemEstimator({ onOpenConsultation }) {
   const [step, setStep] = useState(1);
   const [goal, setGoal] = useState('Custom Website & Digital Presence');
-  const [industry, setIndustry] = useState('Real Estate');
+  const [industry, setIndustry] = useState('Education & Academics');
   const [timeline, setTimeline] = useState('2 to 4 Weeks');
   const [submitted, setSubmitted] = useState(false);
 
   const goals = [
     'Custom Website & Digital Presence',
-    'Business Software (CRM / ERP / Inventory)',
+    'Business Software (School ERP / Operations / Inventory)',
     'AI Workflow Automation',
     'Proprietary Platform Deployment'
   ];
 
   const industries = [
-    'Real Estate & Construction',
-    'Healthcare & Clinics',
     'Education & Academics',
+    'Healthcare & Clinics',
     'Retail & E-Commerce',
     'Manufacturing & Industrial',
     'Professional Services'

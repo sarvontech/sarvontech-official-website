@@ -31,7 +31,7 @@ export default function Hero({ onOpenConsultation }) {
 
             {/* Short Supporting Copy */}
             <p className="text-lg sm:text-xl text-[var(--color-text-secondary)] max-w-2xl leading-relaxed font-normal">
-              From websites and custom software to CRM, automation and AI, we build practical digital solutions around the way your business works.
+              From websites and custom software to School ERP platforms, automation and AI, we build practical digital solutions around the way your organization works.
             </p>
 
             {/* Action Buttons */}
@@ -96,9 +96,9 @@ export default function Hero({ onOpenConsultation }) {
                 </div>
 
                 <div className="p-4 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] space-y-1">
-                  <div className="text-xs font-mono text-[var(--color-brand)] uppercase font-semibold">2. Business Systems & CRM</div>
-                  <div className="text-sm font-bold text-[var(--color-text-primary)]">Organize Enquiries & Sales Follow-ups</div>
-                  <div className="text-xs text-[var(--color-text-secondary)]">Never lose a prospect again with automated lead routing.</div>
+                  <div className="text-xs font-mono text-[var(--color-brand)] uppercase font-semibold">2. School ERP & Management Systems</div>
+                  <div className="text-sm font-bold text-[var(--color-text-primary)]">Streamline School Admin & Admissions</div>
+                  <div className="text-xs text-[var(--color-text-secondary)]">Automate fee collection, student attendance, report cards & parent updates.</div>
                 </div>
 
                 <div className="p-4 rounded-2xl bg-[var(--color-surface)] border border-[var(--color-border)] space-y-1">

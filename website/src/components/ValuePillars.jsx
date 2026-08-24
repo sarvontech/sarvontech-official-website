@@ -17,7 +17,7 @@ export default function ValuePillars() {
       badge: "PILLAR 02",
       title: "Business Software",
       subtitle: "Custom SaaS & Tools",
-      desc: "Tailored CRM engines, real-estate lead tools, multi-provider appointment systems, and inventory platforms that streamline operations.",
+      desc: "School ERP management platforms, custom software tools, multi-provider appointment systems, and inventory platforms that streamline operations.",
       points: ["Unified Operational Data", "Role-Based Access", "Custom API Integrations"]
     },
     {
