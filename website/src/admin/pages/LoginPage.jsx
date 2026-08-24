@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { isSupabaseConfigured } from '../lib/supabase';
 import { useTheme } from '../../context/ThemeContext';
 import { Lock, Mail, Loader2, AlertCircle, ArrowRight, Sun, Moon } from 'lucide-react';
 
@@ -59,6 +60,19 @@ export default function LoginPage() {
             <p className="text-xs font-mono text-[var(--color-text-secondary)]">Production Control & Operations Portal</p>
           </div>
         </div>
+
+        {/* Configuration Notice if Supabase environment variables are unconfigured */}
+        {!isSupabaseConfigured && (
+          <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-600 dark:text-amber-300 text-xs space-y-1">
+            <div className="font-bold flex items-center gap-1.5 text-amber-500">
+              <AlertCircle className="w-4 h-4 flex-shrink-0" />
+              <span>Production Configuration Alert</span>
+            </div>
+            <p className="leading-relaxed">
+              Required production environment variables are missing in Vercel. Please set <code className="bg-black/20 px-1 py-0.5 rounded font-mono">VITE_SUPABASE_URL</code> and <code className="bg-black/20 px-1 py-0.5 rounded font-mono">VITE_SUPABASE_ANON_KEY</code> in Vercel Project Settings.
+            </p>
+          </div>
+        )}
 
         {/* Error Alert */}
         {error && (
