@@ -222,15 +222,6 @@ export default function SelectedWorkSlider() {
                     <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed line-clamp-2">
                       {p.summary}
                     </p>
-
-                    {/* Tech Badges */}
-                    <div className="pt-2 flex flex-wrap gap-1.5">
-                      {p.technology.slice(0, 3).map((tech, i) => (
-                        <span key={i} className="text-[10px] font-mono text-[var(--color-text-secondary)] bg-[var(--color-accent-soft)] px-2 py-0.5 rounded border border-[var(--color-border)]">
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
                   </div>
                 </div>
 

@@ -64,15 +64,6 @@ export default function SelectedWorkSection() {
                   <p className="text-xs text-gray-300 leading-relaxed line-clamp-3">
                     {p.summary}
                   </p>
-
-                  {/* Technology Badges */}
-                  <div className="pt-2 flex flex-wrap gap-1.5">
-                    {p.technology.map((tech, i) => (
-                      <span key={i} className="text-[10px] font-mono text-gray-400 bg-white/5 px-2 py-0.5 rounded border border-white/5">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
                 </div>
               </div>
 

@@ -30,19 +30,19 @@ export const SOLUTIONS_CATEGORIES = [
     title: "Custom Business Software",
     shortTitle: "BUSINESS SYSTEMS",
     tagline: "Software built around the way your business works",
-    headline: "Lead Management, CRM & Operational Systems",
-    desc: "Stop wrestling with generic tools or spreadsheets. We build custom software, CRM pipelines, and booking platforms engineered around your specific operational workflow.",
+    headline: "School ERP, Operational & Management Systems",
+    desc: "Stop wrestling with generic tools or spreadsheets. We build School ERP management platforms, custom software, and booking engines engineered around your operational workflow.",
     icon: "Database",
     points: [
       "Consolidate fragmented spreadsheets into one place",
-      "Automated lead routing to your sales team",
+      "Automated student admissions & fee collection",
       "Multi-provider appointment & schedule management",
       "Real-time business inventory & order tracking"
     ],
-    detailedProblem: "Off-the-shelf software forces your business into rigid templates, while spreadsheets become messy as your team grows.",
-    whoItIsFor: "Growing companies, real estate developers, multi-branch service providers, and factories needing custom operational tools.",
+    detailedProblem: "Off-the-shelf software forces your organization into rigid templates, while spreadsheets become messy as your team grows.",
+    whoItIsFor: "Schools & educational institutions, growing companies, multi-branch service providers, and factories needing custom operational tools.",
     whatWeBuild: [
-      "Custom Sales CRMs & Lead Pipelines",
+      "School & Educational ERP Systems",
       "Appointment & Scheduling Engines",
       "Inventory & Order Control Systems",
       "Internal Team Dashboards & Portals"
@@ -104,165 +104,33 @@ export const SOLUTIONS_CATEGORIES = [
 ];
 
 export const PROJECTS_DATA = [
-  // 1st Project: Real Estate CRM
+  // 1st Project: School & Educational ERP Management System (POSITION 1)
   {
-    id: "real-estate-crm",
-    slug: "real-estate-crm",
-    name: "Real Estate Lead Engine & Sales CRM",
-    category: "Real Estate",
-    industry: "Real Estate",
+    id: "school-erp-system",
+    slug: "school-erp-system",
+    name: "School & Educational ERP Management System",
+    category: "Education",
+    industry: "Education & ERP",
     isFeatured: true,
     isRealProject: true,
     isDemo: false,
-    summary: "An end-to-end real estate sales system that ingests leads from Facebook Ads, Google Ads, website forms, and property portals into a single organized pipeline with automated buyer qualification.",
-    image: "/assets/images/projects/real-estate-crm.webp",
-    imageLarge: "/assets/images/projects/real-estate-crm-1200.webp",
-    challenge: "Real estate developers lose potential property buyers because incoming leads get scattered across personal agent phones, WhatsApp chats, and unorganized spreadsheets.",
-    approach: "Sarvon Tech built an automated lead ingestion engine that captures inquiries instantly, triggers an automated buyer qualification bot over WhatsApp, and routes high-budget prospects to available sales executives.",
-    solution: "A unified Real Estate CRM dashboard providing real-time lead scoring, agent assignment, automated site visit tracking, and sales closure analytics.",
-    features: [
-      "Omnichannel Lead Capture (Meta Ads, Website, WhatsApp, Portals)",
-      "AI WhatsApp Qualification Bot (Budget, Timeline, Location)",
-      "Automated Sales Agent Lead Assignment",
-      "Site Visit Scheduling & Location Pin Dispatches",
-      "Real-time Executive Revenue & Conversion Dashboard"
-    ],
-    technology: ["React", "Node.js", "PostgreSQL", "WhatsApp API", "Tailwind CSS"],
-    outcome: "Reduced lead response time to under 60 seconds, streamlining sales follow-ups and site visit conversions."
-  },
-  // 2nd Project: Spiritual Organization Digital Platform (POSITION 2 MANDATORY)
-  {
-    id: "spiritual-organization-platform",
-    slug: "spiritual-organization-platform",
-    name: "Spiritual Organization Digital Platform",
-    category: "Spiritual & Community",
-    industry: "Spiritual & Community",
-    isFeatured: true,
-    isRealProject: false,
-    isDemo: true,
-    badge: "CONCEPT / DEMO",
-    summary: "A representative digital platform concept engineered for spiritual organizations, trusts, temples, and community institutions to manage event programs, announcements, and online donations.",
-    image: "/assets/images/projects/spiritual-organization.webp",
-    imageLarge: "/assets/images/projects/spiritual-organization-1200.webp",
-    challenge: "Spiritual trusts and community organizations need simple, transparent digital communication channels for festival schedules, devotee updates, and online contribution receipts.",
-    approach: "Sarvon Tech architected a high-trust digital platform blueprint featuring event calendars, news feeds, online donation receipts, and multi-language support capabilities.",
-    solution: "A clean, peaceful, mobile-friendly institutional portal concept designed specifically for community engagement and transparent trust management.",
-    features: [
-      "Trust & Organization Information Showcase",
-      "Interactive Event & Festival Schedule Calendar",
-      "Transparent Online Donation & E-Receipt Module",
-      "Community Announcements & Video Media Feed",
-      "Multi-Language Accessibility (English, Hindi, Regional)"
-    ],
-    technology: ["React", "Vite", "Node.js", "Tailwind CSS", "Payment API"],
-    outcome: "Representative technology blueprint demonstrating Sarvon Tech's capacity to build platforms for spiritual institutions and community trusts."
-  },
-  // 3rd Project: Healthcare Clinic Smart Booking System
-  {
-    id: "smart-appointment-engine",
-    slug: "smart-appointment-engine",
-    name: "Healthcare Clinic Smart Booking System",
-    category: "Healthcare",
-    industry: "Healthcare",
-    isFeatured: true,
-    isRealProject: true,
-    isDemo: false,
-    summary: "A multi-provider online appointment booking system for medical clinics and healthcare consultants featuring real-time slot synchronization and automated WhatsApp patient reminders.",
-    image: "/assets/images/projects/healthcare-platform.webp",
-    imageLarge: "/assets/images/projects/healthcare-platform-1200.webp",
-    challenge: "Medical clinics experience high appointment no-show rates and front-desk bottlenecks due to manual phone booking management.",
-    approach: "Sarvon Tech engineered a 24/7 web and WhatsApp booking system allowing patients to search doctor availability, book open slots instantly, and receive automated reminder alerts.",
-    solution: "A frictionless scheduling engine synchronized in real-time across clinic rosters with 24h and 2h automated WhatsApp notification loops.",
-    features: [
-      "Doctor & Specialty Search with Real-Time Slot Availability",
-      "Instant Patient Booking & Deposit Collection",
-      "Automated WhatsApp & SMS Reminder Loop (24h & 2h prior)",
-      "Doctor Roster & Multi-Branch Schedule Control",
-      "Post-Consultation Review & Follow-Up Automation"
-    ],
-    technology: ["React", "Node.js", "Express", "Tailwind CSS", "WhatsApp API"],
-    outcome: "Decreased appointment no-shows significantly and enabled 24/7 patient booking without expanding front-desk staff."
-  },
-  // 4th Project: Multi-Store E-Commerce & Stock Control Platform
-  {
-    id: "multi-store-inventory",
-    slug: "multi-store-inventory",
-    name: "Multi-Store E-Commerce & Stock Control Platform",
-    category: "E-commerce",
-    industry: "Retail & E-Commerce",
-    isFeatured: true,
-    isRealProject: true,
-    isDemo: false,
-    summary: "Centralized inventory management software that synchronizes stock levels across website storefronts, physical retail outlets, and online marketplaces in real time.",
-    image: "/assets/images/projects/ecommerce-system.webp",
-    imageLarge: "/assets/images/projects/ecommerce-system-1200.webp",
-    challenge: "Retailers selling across physical stores and web platforms frequently oversell out-of-stock items, leading to customer complaints and manual refund processing.",
-    approach: "Sarvon Tech created a real-time stock control engine that deducts inventory instantly upon any order event and triggers low-stock alerts before stockouts occur.",
-    solution: "A unified inventory and order management dashboard with automated purchase order generation and item profit margin reporting.",
-    features: [
-      "Real-Time Multi-Store Inventory Synchronization",
-      "Instant Stock Deduction Across Web & Counter POS",
-      "Automated Low-Stock Safety Threshold Alerts",
-      "Supplier Purchase Order Dispatch Logs",
-      "Product Margin & Dead-Stock Financial Analytics"
-    ],
-    technology: ["React", "Node.js", "Redis", "Tailwind CSS", "REST API"],
-    outcome: "Eliminated overselling incidents and reduced stockout occurrences across retail channels."
-  },
-  // 5th Project: Enterprise Business Operations Portal
-  {
-    id: "custom-business-systems",
-    slug: "custom-business-systems",
-    name: "Enterprise Business Operations Portal",
-    category: "Business Systems",
-    industry: "Business Systems",
-    isFeatured: true,
-    isRealProject: true,
-    isDemo: false,
-    summary: "Custom operational software consolidating team workflows, client communications, task tracking, and executive performance metrics into a single unified platform.",
+    summary: "An end-to-end School ERP management platform unifying student admissions, fee collection, attendance, timetable scheduling, report cards, and parent communication.",
     image: "/assets/images/projects/custom-business-systems.webp",
     imageLarge: "/assets/images/projects/custom-business-systems-1200.webp",
-    challenge: "Growing companies suffer from fragmented operations when teams use disconnected spreadsheets, chat groups, and third-party tools.",
-    approach: "Sarvon Tech designed a modular business management portal with role-based access, automated task assignments, and centralized client records.",
-    solution: "A scalable internal software platform that replaces manual double-entry with real-time operational visibility.",
+    challenge: "Educational institutions struggle with fragmented administrative tasks across paper registers, fee tracking spreadsheets, and manual report card generation.",
+    approach: "Sarvon Tech engineered a centralized School ERP platform connecting administrators, teachers, students, and parents into a single synchronized portal.",
+    solution: "A complete web & mobile school management system automating fee collection, student attendance, online gradebooks, and instant parent notifications.",
     features: [
-      "Role-Based Access Control (Admins, Managers, Executives)",
-      "Centralized Client & Lead Management Database",
-      "Automated Task Workflow & Milestone Reminders",
-      "Real-Time Operational Analytics & Exportable Reports",
-      "Encrypted Document & Contract Storage"
+      "Student Information & Admission Management",
+      "Automated Fee Collection & E-Receipt Generation",
+      "Digital Attendance & Absentee Parent WhatsApp Alerts",
+      "Exam Management, Marks Entry & Report Card Generator",
+      "Teacher Timetable & Class Routine Management"
     ],
-    technology: ["React", "Node.js", "PostgreSQL", "Tailwind CSS"],
-    outcome: "Consolidated operational workflows into one unified tool, improving team efficiency and data accuracy."
+    technology: ["React", "Node.js", "PostgreSQL", "Tailwind CSS", "WhatsApp API"],
+    outcome: "Streamlined school administration, reduced fee overdue rates, and enhanced parent-teacher transparency."
   },
-  // 6th Project: Custom Website & Data Management Platform
-  {
-    id: "custom-website-real-time-data",
-    slug: "custom-website-real-time-data",
-    name: "Custom Website & Data Management Platform",
-    category: "Websites",
-    industry: "Custom Digital Solution",
-    isFeatured: true,
-    isRealProject: false,
-    isDemo: true,
-    badge: "CONCEPT / DEMO",
-    summary: "Your website, your data, your control. Update content and information anytime without waiting for a developer.",
-    image: "/assets/images/projects/custom-website-real-time-data.webp",
-    imageLarge: "/assets/images/projects/custom-website-real-time-data-1200.webp",
-    challenge: "Businesses waste money and time waiting for web developers to make minor content updates, schedule changes, or price revisions.",
-    approach: "Sarvon Tech engineered a custom website with an intuitive data management panel, giving business teams direct control to update website content and operational information instantly.",
-    solution: "A custom website with a built-in data management system that gives businesses direct control over their website content and information. Teams can update relevant data themselves without depending on a developer for every change.",
-    features: [
-      "Independent Content & Data Management Panel",
-      "Instant Website Updates Without Modifying Source Code",
-      "Self-Service Roster, Schedule & Pricing Revisions",
-      "Role-Based Team Administrative Access Controls",
-      "Zero Developer Dependency for Routine Content Maintenance"
-    ],
-    technology: ["React", "Node.js", "REST API", "Tailwind CSS"],
-    outcome: "Empowers business teams to maintain up-to-date website information independently, significantly reducing ongoing developer maintenance costs."
-  },
-  // 7th Project: Revora Cinematic
+  // 2nd Project: Revora Cinematic (POSITION 2)
   {
     id: "revora-cinematic",
     slug: "revora-cinematic",
@@ -290,7 +158,7 @@ export const PROJECTS_DATA = [
     technology: ["React", "Node.js", "Express", "Tailwind CSS", "REST API"],
     outcome: "Helps cinematic production teams scale operations, manage multiple projects, and deliver a premium customer experience."
   },
-  // 8th Project: Revora Cinematic Academy
+  // 3rd Project: Revora Cinematic Academy (POSITION 3)
   {
     id: "revora-cinematic-academy",
     slug: "revora-cinematic-academy",
@@ -316,26 +184,158 @@ export const PROJECTS_DATA = [
     ],
     technology: ["React", "Vite", "Node.js", "Tailwind CSS"],
     outcome: "Delivers an engaging learning showcase that drives student inquiry and enrollment growth for creative production courses."
+  },
+  // Spiritual Organization Digital Platform
+  {
+    id: "spiritual-organization-platform",
+    slug: "spiritual-organization-platform",
+    name: "Spiritual Organization Digital Platform",
+    category: "Spiritual & Community",
+    industry: "Spiritual & Community",
+    isFeatured: true,
+    isRealProject: false,
+    isDemo: true,
+    badge: "CONCEPT / DEMO",
+    summary: "A representative digital platform concept engineered for spiritual organizations, trusts, temples, and community institutions to manage event programs, announcements, and online donations.",
+    image: "/assets/images/projects/spiritual-organization.webp",
+    imageLarge: "/assets/images/projects/spiritual-organization-1200.webp",
+    challenge: "Spiritual trusts and community organizations need simple, transparent digital communication channels for festival schedules, devotee updates, and online contribution receipts.",
+    approach: "Sarvon Tech architected a high-trust digital platform blueprint featuring event calendars, news feeds, online donation receipts, and multi-language support capabilities.",
+    solution: "A clean, peaceful, mobile-friendly institutional portal concept designed specifically for community engagement and transparent trust management.",
+    features: [
+      "Trust & Organization Information Showcase",
+      "Interactive Event & Festival Schedule Calendar",
+      "Transparent Online Donation & E-Receipt Module",
+      "Community Announcements & Video Media Feed",
+      "Multi-Language Accessibility (English, Hindi, Regional)"
+    ],
+    technology: ["React", "Vite", "Node.js", "Tailwind CSS", "Payment API"],
+    outcome: "Representative technology blueprint demonstrating Sarvon Tech's capacity to build platforms for spiritual institutions and community trusts."
+  },
+  // 6th Project: Healthcare Clinic Smart Booking System
+  {
+    id: "smart-appointment-engine",
+    slug: "smart-appointment-engine",
+    name: "Healthcare Clinic Smart Booking System",
+    category: "Healthcare",
+    industry: "Healthcare",
+    isFeatured: true,
+    isRealProject: true,
+    isDemo: false,
+    summary: "A multi-provider online appointment booking system for medical clinics and healthcare consultants featuring real-time slot synchronization and automated WhatsApp patient reminders.",
+    image: "/assets/images/projects/healthcare-platform.webp",
+    imageLarge: "/assets/images/projects/healthcare-platform-1200.webp",
+    challenge: "Medical clinics experience high appointment no-show rates and front-desk bottlenecks due to manual phone booking management.",
+    approach: "Sarvon Tech engineered a 24/7 web and WhatsApp booking system allowing patients to search doctor availability, book open slots instantly, and receive automated reminder alerts.",
+    solution: "A frictionless scheduling engine synchronized in real-time across clinic rosters with 24h and 2h automated WhatsApp notification loops.",
+    features: [
+      "Doctor & Specialty Search with Real-Time Slot Availability",
+      "Instant Patient Booking & Deposit Collection",
+      "Automated WhatsApp & SMS Reminder Loop (24h & 2h prior)",
+      "Doctor Roster & Multi-Branch Schedule Control",
+      "Post-Consultation Review & Follow-Up Automation"
+    ],
+    technology: ["React", "Node.js", "Express", "Tailwind CSS", "WhatsApp API"],
+    outcome: "Decreased appointment no-shows significantly and enabled 24/7 patient booking without expanding front-desk staff."
+  },
+  // 7th Project: Multi-Store E-Commerce & Stock Control Platform
+  {
+    id: "multi-store-inventory",
+    slug: "multi-store-inventory",
+    name: "Multi-Store E-Commerce & Stock Control Platform",
+    category: "E-commerce",
+    industry: "Retail & E-Commerce",
+    isFeatured: true,
+    isRealProject: true,
+    isDemo: false,
+    summary: "Centralized inventory management software that synchronizes stock levels across website storefronts, physical retail outlets, and online marketplaces in real time.",
+    image: "/assets/images/projects/ecommerce-system.webp",
+    imageLarge: "/assets/images/projects/ecommerce-system-1200.webp",
+    challenge: "Retailers selling across physical stores and web platforms frequently oversell out-of-stock items, leading to customer complaints and manual refund processing.",
+    approach: "Sarvon Tech created a real-time stock control engine that deducts inventory instantly upon any order event and triggers low-stock alerts before stockouts occur.",
+    solution: "A unified inventory and order management dashboard with automated purchase order generation and item profit margin reporting.",
+    features: [
+      "Real-Time Multi-Store Inventory Synchronization",
+      "Instant Stock Deduction Across Web & Counter POS",
+      "Automated Low-Stock Safety Threshold Alerts",
+      "Supplier Purchase Order Dispatch Logs",
+      "Product Margin & Dead-Stock Financial Analytics"
+    ],
+    technology: ["React", "Node.js", "Redis", "Tailwind CSS", "REST API"],
+    outcome: "Eliminated overselling incidents and reduced stockout occurrences across retail channels."
+  },
+  // 8th Project: Enterprise Business Operations Portal
+  {
+    id: "custom-business-systems",
+    slug: "custom-business-systems",
+    name: "Enterprise Business Operations Portal",
+    category: "Business Systems",
+    industry: "Business Systems",
+    isFeatured: true,
+    isRealProject: true,
+    isDemo: false,
+    summary: "Custom operational software consolidating team workflows, client communications, task tracking, and executive performance metrics into a single unified platform.",
+    image: "/assets/images/projects/custom-business-systems.webp",
+    imageLarge: "/assets/images/projects/custom-business-systems-1200.webp",
+    challenge: "Growing companies suffer from fragmented operations when teams use disconnected spreadsheets, chat groups, and third-party tools.",
+    approach: "Sarvon Tech designed a modular business management portal with role-based access, automated task assignments, and centralized client records.",
+    solution: "A scalable internal software platform that replaces manual double-entry with real-time operational visibility.",
+    features: [
+      "Role-Based Access Control (Admins, Managers, Executives)",
+      "Centralized Client & Lead Management Database",
+      "Automated Task Workflow & Milestone Reminders",
+      "Real-Time Operational Analytics & Exportable Reports",
+      "Encrypted Document & Contract Storage"
+    ],
+    technology: ["React", "Node.js", "PostgreSQL", "Tailwind CSS"],
+    outcome: "Consolidated operational workflows into one unified tool, improving team efficiency and data accuracy."
+  },
+  // 9th Project: Custom Website & Data Management Platform
+  {
+    id: "custom-website-real-time-data",
+    slug: "custom-website-real-time-data",
+    name: "Custom Website & Data Management Platform",
+    category: "Websites",
+    industry: "Custom Digital Solution",
+    isFeatured: true,
+    isRealProject: false,
+    isDemo: true,
+    badge: "CONCEPT / DEMO",
+    summary: "Your website, your data, your control. Update content and information anytime without waiting for a developer.",
+    image: "/assets/images/projects/custom-website-real-time-data.webp",
+    imageLarge: "/assets/images/projects/custom-website-real-time-data-1200.webp",
+    challenge: "Businesses waste money and time waiting for web developers to make minor content updates, schedule changes, or price revisions.",
+    approach: "Sarvon Tech engineered a custom website with an intuitive data management panel, giving business teams direct control to update website content and operational information instantly.",
+    solution: "A custom website with a built-in data management system that gives businesses direct control over their website content and information. Teams can update relevant data themselves without depending on a developer for every change.",
+    features: [
+      "Independent Content & Data Management Panel",
+      "Instant Website Updates Without Modifying Source Code",
+      "Self-Service Roster, Schedule & Pricing Revisions",
+      "Role-Based Team Administrative Access Controls",
+      "Zero Developer Dependency for Routine Content Maintenance"
+    ],
+    technology: ["React", "Node.js", "REST API", "Tailwind CSS"],
+    outcome: "Empowers business teams to maintain up-to-date website information independently, significantly reducing ongoing developer maintenance costs."
   }
 ];
 
 export const PRODUCTS_HUMANIZED = [
   {
-    id: "real-estate-crm",
-    slug: "real-estate-crm",
-    name: "Real Estate Sales System",
+    id: "school-erp-system",
+    slug: "school-erp-system",
+    name: "School ERP System",
     badge: "Sarvon Tech Product",
-    tagline: "Too many leads. Too many follow-ups. One organized system.",
-    summary: "Bring enquiries from Meta ads, Google, property portals, and website forms into one clean pipeline. Automatically score leads, route them to executives, and track site visits.",
-    problem: "Property enquiries get lost across personal phones, WhatsApp chats, and messy spreadsheets.",
-    solution: "A unified system that captures, qualifies, and assigns leads instantly with automated site visit scheduling.",
-    benefit: "Never lose a high-value buyer lead again. Sales reps respond in under 60 seconds.",
+    tagline: "Unified school administration, admissions, fee collection & parent updates.",
+    summary: "Bring student admissions, fee payments, attendance tracking, timetable scheduling, and report card generation into one seamless web and mobile platform.",
+    problem: "School administration gets overwhelmed by manual paper registers, untracked fee overdues, and delayed parent communication.",
+    solution: "A complete educational management system that automates fee receipts, digital attendance, gradebook reports, and instant WhatsApp alerts to parents.",
+    benefit: "Reduces administrative overhead by 80%, speeds up fee collection, and improves parent-teacher transparency.",
     storySteps: [
-      { step: "1", title: "Capture", desc: "Leads from Facebook Ads, website forms & portals land in one central list." },
-      { step: "2", title: "Qualify", desc: "Automated queries confirm buyer budget, preferred location & purchase timeline." },
-      { step: "3", title: "Assign", desc: "Qualified leads route instantly to the right sales executive." },
-      { step: "4", title: "Follow Up", desc: "Automated WhatsApp reminders guide buyers to schedule site visits." },
-      { step: "5", title: "Close", desc: "Track site visits, buyer feedback, and deal closures in real time." }
+      { step: "1", title: "Admissions", desc: "Digital student registration & document verification." },
+      { step: "2", title: "Fee Collection", desc: "Automated fee reminders, online payments & e-receipts." },
+      { step: "3", title: "Attendance", desc: "Instant teacher attendance log with automated parent WhatsApp alerts." },
+      { step: "4", title: "Report Cards", desc: "Automated marks entry, grade calculation & digital report cards." },
+      { step: "5", title: "Parent Portal", desc: "Parents track attendance, grades, and circulars in real time." }
     ],
     ctaText: "Explore Product"
   },
@@ -380,14 +380,6 @@ export const PRODUCTS_HUMANIZED = [
 ];
 
 export const INDUSTRIES_HUMANIZED = [
-  {
-    id: "real-estate",
-    slug: "real-estate",
-    title: "Real Estate",
-    tagline: "Organized lead follow-ups, property portals, and sales automation.",
-    icon: "Building2",
-    description: "Lead management, property websites, site visit scheduling, and broker portals engineered for developers and agencies."
-  },
   {
     id: "healthcare",
     slug: "healthcare",
@@ -730,9 +722,9 @@ export const WORK_DOMAINS = [
   },
   {
     num: "04",
-    title: "Real Estate Technology",
-    desc: "Build omnichannel lead ingestion engines, automated qualification bots, and site-visit tracking CRMs.",
-    icon: "Building2"
+    title: "School ERP Systems",
+    desc: "Build comprehensive school administration, student admissions, fee collection, and digital report card platforms.",
+    icon: "GraduationCap"
   },
   {
     num: "05",

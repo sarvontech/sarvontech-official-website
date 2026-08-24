@@ -108,14 +108,6 @@ export default function ProjectsPage({ onOpenConsultation }) {
                   <p className="text-sm text-[var(--color-text-secondary)] leading-relaxed">
                     {p.summary}
                   </p>
-
-                  <div className="pt-2 flex flex-wrap gap-2">
-                    {p.technology.map((tech, i) => (
-                      <span key={i} className="text-xs font-mono text-[var(--color-text-secondary)] bg-[var(--color-accent-soft)] px-2.5 py-1 rounded border border-[var(--color-border)]">
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
                 </div>
               </div>
 

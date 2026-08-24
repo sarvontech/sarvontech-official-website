@@ -47,7 +47,7 @@ export default function Footer({ onOpenConsultation }) {
               <li><Link to="/solutions" className="hover:text-[var(--color-brand)] transition-colors">Digital Presence & Websites</Link></li>
               <li><Link to="/solutions" className="hover:text-[var(--color-brand)] transition-colors">Custom Business Software</Link></li>
               <li><Link to="/solutions" className="hover:text-[var(--color-brand)] transition-colors">AI & Workflow Automation</Link></li>
-              <li><Link to="/solutions" className="hover:text-[var(--color-brand)] transition-colors">CRM & Lead Management</Link></li>
+              <li><Link to="/solutions" className="hover:text-[var(--color-brand)] transition-colors">School ERP & Education Systems</Link></li>
             </ul>
           </div>
 
@@ -57,7 +57,7 @@ export default function Footer({ onOpenConsultation }) {
               Sarvon Tech Labs
             </h4>
             <ul className="space-y-2">
-              <li><Link to="/products" className="hover:text-[var(--color-brand)] transition-colors">Real Estate Sales CRM</Link></li>
+              <li><Link to="/products" className="hover:text-[var(--color-brand)] transition-colors">School ERP System</Link></li>
               <li><Link to="/products" className="hover:text-[var(--color-brand)] transition-colors">Smart Booking System</Link></li>
               <li><Link to="/products" className="hover:text-[var(--color-brand)] transition-colors">Multi-Store Inventory Suite</Link></li>
               <li><Link to="/products" className="hover:text-[var(--color-brand)] transition-colors">AI WhatsApp Bot Engine</Link></li>
