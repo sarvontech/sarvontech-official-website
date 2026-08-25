@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-export default function SEOHead({ title, description, canonical }) {
+export default function SEOHead({ title, description, keywords, canonical }) {
   useEffect(() => {
     // Title
     const defaultTitle = "Sarvon Tech — Digital Solutions & Custom Software";
@@ -9,12 +9,22 @@ export default function SEOHead({ title, description, canonical }) {
     // Meta Description
     const metaDesc = document.querySelector('meta[name="description"]');
     if (metaDesc) {
-      metaDesc.setAttribute('content', description || "Sarvon Tech builds custom business websites, software systems, and AI automation tailored to your business.");
+      metaDesc.setAttribute('content', description || "Sarvon Tech builds custom business websites, software systems, School ERP platforms, and AI automation tailored to your business.");
     }
+
+    // Meta Keywords
+    let metaKeywords = document.querySelector('meta[name="keywords"]');
+    const defaultKeywords = "School ERP, School Management Software, Educational ERP System, Custom Software Development, Digital Solutions, AI Workflow Automation, School Administration System, Fee Collection Software, Student Information System, Sarvon Tech";
+    if (!metaKeywords) {
+      metaKeywords = document.createElement('meta');
+      metaKeywords.setAttribute('name', 'keywords');
+      document.head.appendChild(metaKeywords);
+    }
+    metaKeywords.setAttribute('content', keywords || defaultKeywords);
 
     // Scroll to top on page navigation
     window.scrollTo(0, 0);
-  }, [title, description, canonical]);
+  }, [title, description, keywords, canonical]);
 
   return null;
 }
