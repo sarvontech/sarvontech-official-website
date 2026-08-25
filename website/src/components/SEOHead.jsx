@@ -22,6 +22,16 @@ export default function SEOHead({ title, description, keywords, canonical }) {
     }
     metaKeywords.setAttribute('content', keywords || defaultKeywords);
 
+    // Canonical Link
+    let canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (!canonicalLink) {
+      canonicalLink = document.createElement('link');
+      canonicalLink.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonicalLink);
+    }
+    const currentPath = window.location.pathname === '/' ? '' : window.location.pathname;
+    canonicalLink.setAttribute('href', canonical || `https://www.sarvontech.in${currentPath}`);
+
     // Scroll to top on page navigation
     window.scrollTo(0, 0);
   }, [title, description, keywords, canonical]);
