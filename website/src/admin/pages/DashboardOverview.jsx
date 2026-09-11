@@ -7,7 +7,8 @@ import {
   Users, 
   ArrowUpRight, 
   Activity,
-  Plus
+  Plus,
+  MessageSquare
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -15,7 +16,7 @@ export default function DashboardOverview() {
   const [stats, setStats] = useState({
     projectsCount: 0,
     servicesCount: 0,
-    rolesCount: 0,
+    inquiriesCount: 0,
     applicationsCount: 0,
   });
   const [recentApps, setRecentApps] = useState([]);
@@ -28,18 +29,19 @@ export default function DashboardOverview() {
   const fetchStats = async () => {
     setLoading(true);
     try {
-      const [projRes, servRes, rolesRes, appsRes] = await Promise.all([
+      const [projRes, servRes, inqRes, appCountRes, appsRes] = await Promise.all([
         supabase.from('projects').select('id', { count: 'exact', head: true }),
         supabase.from('services').select('id', { count: 'exact', head: true }),
-        supabase.from('careers_roles').select('id', { count: 'exact', head: true }),
+        supabase.from('inquiries').select('id', { count: 'exact', head: true }),
+        supabase.from('applications').select('id', { count: 'exact', head: true }),
         supabase.from('applications').select('*').order('created_at', { ascending: false }).limit(5)
       ]);
 
       setStats({
         projectsCount: projRes.count || 0,
         servicesCount: servRes.count || 0,
-        rolesCount: rolesRes.count || 0,
-        applicationsCount: appsRes.data?.length || 0,
+        inquiriesCount: inqRes.count || 0,
+        applicationsCount: appCountRes.count || 0,
       });
 
       if (appsRes.data) {
@@ -55,7 +57,7 @@ export default function DashboardOverview() {
   const statCards = [
     { label: 'Total Projects', value: stats.projectsCount, path: '/admin/projects', icon: FolderKanban, color: 'text-[var(--color-brand)]', bg: 'bg-[var(--color-brand-light)] border-[var(--color-border)]' },
     { label: 'Active Services', value: stats.servicesCount, path: '/admin/services', icon: Wrench, color: 'text-[var(--color-accent-mint)]', bg: 'bg-[var(--color-accent-soft)] border-[var(--color-border)]' },
-    { label: 'Open Career Roles', value: stats.rolesCount, path: '/admin/careers', icon: Briefcase, color: 'text-cyan-600 dark:text-cyan-400', bg: 'bg-cyan-500/10 border-cyan-500/20' },
+    { label: 'Total Inquiries', value: stats.inquiriesCount, path: '/admin/inquiries', icon: MessageSquare, color: 'text-cyan-600 dark:text-cyan-400', bg: 'bg-cyan-500/10 border-cyan-500/20' },
     { label: 'Job Applications', value: stats.applicationsCount, path: '/admin/applications', icon: Users, color: 'text-amber-600 dark:text-amber-400', bg: 'bg-amber-500/10 border-amber-500/20' },
   ];
 

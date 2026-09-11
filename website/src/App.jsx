@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { ThemeProvider } from './context/ThemeContext';
 import { AuthProvider } from './admin/context/AuthContext';
@@ -18,6 +18,7 @@ import ProjectDetailPage from './pages/ProjectDetailPage';
 import CareersPage from './pages/CareersPage';
 import AboutPage from './pages/AboutPage';
 import ContactPage from './pages/ContactPage';
+import DynamicPage from './pages/DynamicPage';
 
 // Admin Module Components & Pages
 import ProtectedRoute from './admin/components/ProtectedRoute';
@@ -34,6 +35,9 @@ import ManageCareers from './admin/pages/ManageCareers';
 import ManageInquiries from './admin/pages/ManageInquiries';
 import ViewApplications from './admin/pages/ViewApplications';
 import ManageAdmins from './admin/pages/ManageAdmins';
+import ManageNavigation from './admin/pages/ManageNavigation';
+
+import { getGlobalSettings } from './lib/supabase';
 
 function AppContent() {
   const [modalOpen, setModalOpen] = useState(false);
@@ -41,6 +45,27 @@ function AppContent() {
   const location = useLocation();
 
   const isAdminRoute = location.pathname.startsWith('/admin');
+
+  useEffect(() => {
+    async function loadGlobalSettings() {
+      const globalData = await getGlobalSettings();
+      if (globalData && globalData.sections) {
+        // Inject CSS
+        if (globalData.sections.css) {
+          const style = document.createElement('style');
+          style.innerHTML = globalData.sections.css;
+          document.head.appendChild(style);
+        }
+        // Inject JS
+        if (globalData.sections.js) {
+          const script = document.createElement('script');
+          script.innerHTML = globalData.sections.js;
+          document.body.appendChild(script);
+        }
+      }
+    }
+    loadGlobalSettings();
+  }, []);
 
   const handleOpenConsultation = (context = '') => {
     setModalContext(context);
@@ -72,6 +97,7 @@ function AppContent() {
           <Route path="/careers" element={<CareersPage onOpenConsultation={handleOpenConsultation} />} />
           <Route path="/about" element={<AboutPage onOpenConsultation={handleOpenConsultation} />} />
           <Route path="/contact" element={<ContactPage />} />
+          <Route path="/:slug" element={<DynamicPage onOpenConsultation={handleOpenConsultation} />} />
 
           {/* Standalone Visual On-Screen Page Builder (Full-screen) */}
           <Route element={<ProtectedRoute />}>
@@ -88,6 +114,7 @@ function AppContent() {
               <Route path="projects" element={<ManageProjects />} />
               <Route path="services" element={<ManageServices />} />
               <Route path="solutions" element={<ManageSolutions />} />
+              <Route path="navigation" element={<ManageNavigation />} />
               <Route path="careers" element={<ManageCareers />} />
               <Route path="inquiries" element={<ManageInquiries />} />
               <Route path="applications" element={<ViewApplications />} />

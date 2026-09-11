@@ -28,6 +28,8 @@ export default function ManageSolutions() {
     desc: '',
     detailedProblem: '',
     whoItIsFor: '',
+    points: [],
+    whatWeBuild: [],
   });
 
   useEffect(() => {
@@ -64,6 +66,8 @@ export default function ManageSolutions() {
         desc: item.desc || '',
         detailedProblem: item.detailedProblem || '',
         whoItIsFor: item.whoItIsFor || '',
+        points: item.points || [],
+        whatWeBuild: item.whatWeBuild || [],
       });
     } else {
       setEditingItem(null);
@@ -75,6 +79,8 @@ export default function ManageSolutions() {
         desc: '',
         detailedProblem: '',
         whoItIsFor: '',
+        points: [],
+        whatWeBuild: [],
       });
     }
     setModalOpen(true);
@@ -87,8 +93,13 @@ export default function ManageSolutions() {
     setSuccessMsg('');
 
     try {
+      const cleanedPoints = (formData.points || []).map(f => f.trim()).filter(f => f.length > 0);
+      const cleanedWhatWeBuild = (formData.whatWeBuild || []).map(f => f.trim()).filter(f => f.length > 0);
+
       const payload = {
         ...formData,
+        points: cleanedPoints,
+        whatWeBuild: cleanedWhatWeBuild,
         slug: formData.title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
       };
 
@@ -257,6 +268,17 @@ export default function ManageSolutions() {
               </div>
 
               <div className="space-y-1">
+                <label className="text-[var(--color-text-secondary)] font-mono">Tagline (Optional)</label>
+                <input 
+                  type="text"
+                  value={formData.tagline}
+                  onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
+                  placeholder="Websites that help your business get discovered and trusted"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--color-bg-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)]"
+                />
+              </div>
+
+              <div className="space-y-1">
                 <label className="text-[var(--color-text-secondary)] font-mono">Description *</label>
                 <textarea 
                   required
@@ -266,6 +288,52 @@ export default function ManageSolutions() {
                   placeholder="Detailed description of what this solution solves..."
                   className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--color-bg-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)]"
                 />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[var(--color-text-secondary)] font-mono">Detailed Problem (Optional)</label>
+                <textarea 
+                  rows={2}
+                  value={formData.detailedProblem}
+                  onChange={(e) => setFormData({ ...formData, detailedProblem: e.target.value })}
+                  placeholder="What is the exact problem this solves?"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--color-bg-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)]"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[var(--color-text-secondary)] font-mono">Who It Is For (Optional)</label>
+                <textarea 
+                  rows={2}
+                  value={formData.whoItIsFor}
+                  onChange={(e) => setFormData({ ...formData, whoItIsFor: e.target.value })}
+                  placeholder="Small businesses, corporate firms..."
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--color-bg-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)]"
+                />
+              </div>
+
+              <div className="grid sm:grid-cols-2 gap-4">
+                <div className="space-y-1">
+                  <label className="text-[var(--color-text-secondary)] font-mono">Solution Features (Optional, one per line)</label>
+                  <textarea 
+                    rows={4}
+                    value={formData.points ? formData.points.join('\n') : ''}
+                    onChange={(e) => setFormData({ ...formData, points: e.target.value.split('\n') })}
+                    placeholder="Feature 1&#10;Feature 2&#10;Feature 3"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--color-bg-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)]"
+                  />
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-[var(--color-text-secondary)] font-mono">Key Deliverables (Optional, one per line)</label>
+                  <textarea 
+                    rows={4}
+                    value={formData.whatWeBuild ? formData.whatWeBuild.join('\n') : ''}
+                    onChange={(e) => setFormData({ ...formData, whatWeBuild: e.target.value.split('\n') })}
+                    placeholder="Deliverable 1&#10;Deliverable 2&#10;Deliverable 3"
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--color-bg-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)]"
+                  />
+                </div>
               </div>
 
               <div className="pt-4 flex justify-end gap-3 border-t border-[var(--color-border)]">

@@ -34,6 +34,7 @@ export default function ManageProjects() {
     challenge: '',
     approach: '',
     solution: '',
+    features: [],
     is_featured: true,
     is_real_project: true,
   });
@@ -78,6 +79,7 @@ export default function ManageProjects() {
         challenge: project.challenge || '',
         approach: project.approach || '',
         solution: project.solution || '',
+        features: project.features || [],
         is_featured: project.is_featured ?? true,
         is_real_project: project.is_real_project ?? true,
       });
@@ -86,7 +88,7 @@ export default function ManageProjects() {
       setFormData({
         name: '',
         slug: '',
-        category: 'Custom Software Systems',
+        category: '',
         industry: 'Enterprise Software',
         summary: '',
         live_url: '',
@@ -94,6 +96,7 @@ export default function ManageProjects() {
         challenge: '',
         approach: '',
         solution: '',
+        features: [],
         is_featured: true,
         is_real_project: true,
       });
@@ -131,8 +134,11 @@ export default function ManageProjects() {
         imageUrl = await handleImageUpload(imageFile);
       }
 
+      const cleanedFeatures = (formData.features || []).map(f => f.trim()).filter(f => f.length > 0);
+
       const payload = {
         ...formData,
+        features: cleanedFeatures,
         image: imageUrl || '/assets/images/projects/custom-business-systems.webp',
         slug: formData.slug || formData.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
       };
@@ -315,14 +321,21 @@ export default function ManageProjects() {
 
                 <div className="space-y-1">
                   <label className="text-[var(--color-text-secondary)] font-mono">Category *</label>
-                  <input 
-                    type="text"
+                  <select 
                     required
                     value={formData.category}
                     onChange={(e) => setFormData({ ...formData, category: e.target.value })}
-                    placeholder="Business Websites & Digital Presence"
-                    className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--color-bg-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)]"
-                  />
+                    className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--color-bg-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)] appearance-none cursor-pointer"
+                  >
+                    <option value="" disabled>Select a Category</option>
+                    <option value="Websites">Websites</option>
+                    <option value="Custom Digital Solution">Custom Digital Solution</option>
+                    <option value="Spiritual & Community">Spiritual & Community</option>
+                    <option value="Education">Education</option>
+                    <option value="E-commerce">E-commerce</option>
+                    <option value="Business Systems">Business Systems</option>
+                    <option value="Healthcare">Healthcare</option>
+                  </select>
                 </div>
               </div>
 
@@ -345,6 +358,50 @@ export default function ManageProjects() {
                   value={formData.live_url}
                   onChange={(e) => setFormData({ ...formData, live_url: e.target.value })}
                   placeholder="https://www.revoracinematic.com/"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--color-bg-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)]"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[var(--color-text-secondary)] font-mono">The Challenge (Optional)</label>
+                <textarea 
+                  rows={2}
+                  value={formData.challenge}
+                  onChange={(e) => setFormData({ ...formData, challenge: e.target.value })}
+                  placeholder="What was the problem?"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--color-bg-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)]"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[var(--color-text-secondary)] font-mono">Our Approach (Optional)</label>
+                <textarea 
+                  rows={2}
+                  value={formData.approach}
+                  onChange={(e) => setFormData({ ...formData, approach: e.target.value })}
+                  placeholder="How did we solve it?"
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--color-bg-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)]"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[var(--color-text-secondary)] font-mono">The Solution Built (Optional)</label>
+                <textarea 
+                  rows={2}
+                  value={formData.solution}
+                  onChange={(e) => setFormData({ ...formData, solution: e.target.value })}
+                  placeholder="Describe the final solution."
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--color-bg-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)]"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-[var(--color-text-secondary)] font-mono">Key Features (Optional, one per line)</label>
+                <textarea 
+                  rows={3}
+                  value={formData.features ? formData.features.join('\n') : ''}
+                  onChange={(e) => setFormData({ ...formData, features: e.target.value.split('\n') })}
+                  placeholder="Feature 1\nFeature 2\nFeature 3"
                   className="w-full px-3.5 py-2.5 rounded-xl bg-[var(--color-bg-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)]"
                 />
               </div>

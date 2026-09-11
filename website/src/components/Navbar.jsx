@@ -2,12 +2,36 @@ import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Menu, X, ArrowRight, Layers, Sun, Moon } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import { getLiveNavigationLinks } from '../lib/supabase';
 
 export default function Navbar({ onOpenConsultation }) {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [navLinks, setNavLinks] = useState([]);
   const location = useLocation();
   const { theme, toggleTheme } = useTheme();
+
+  useEffect(() => {
+    async function fetchNav() {
+      const links = await getLiveNavigationLinks();
+      if (links) {
+        setNavLinks(links);
+      } else {
+        // Fallback static links if db is offline or empty
+        setNavLinks([
+          { id: '1', label: 'Home', url: '/', order_index: 0 },
+          { id: '2', label: 'Solutions', url: '/solutions', order_index: 1 },
+          { id: '3', label: 'Services', url: '/services', order_index: 2 },
+          { id: '4', label: 'Products', url: '/products', order_index: 3 },
+          { id: '5', label: 'Industries', url: '/industries', order_index: 4 },
+          { id: '6', label: 'Projects', url: '/projects', order_index: 5 },
+          { id: '7', label: 'Careers', url: '/careers', order_index: 6 },
+          { id: '8', label: 'About', url: '/about', order_index: 7 },
+        ]);
+      }
+    }
+    fetchNav();
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -53,93 +77,129 @@ export default function Navbar({ onOpenConsultation }) {
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center gap-1">
-            <Link 
-              to="/" 
-              className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                isActive('/') 
-                  ? 'text-[var(--color-brand)] bg-[var(--color-brand-light)] font-semibold' 
-                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
-              }`}
-            >
-              Home
-            </Link>
+            {navLinks.filter(l => !l.parent_id).map((link) => {
+              const children = navLinks.filter(child => child.parent_id === link.id);
+              const hasChildren = children.length > 0;
+              
+              if (hasChildren) {
+                return (
+                  <div key={link.id} className="relative group">
+                    <button 
+                      className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors flex items-center gap-1 ${
+                        location.pathname.startsWith(link.url) && link.url !== '/'
+                          ? 'text-[var(--color-brand)] font-semibold' 
+                          : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
+                      }`}
+                    >
+                      {link.label}
+                      <svg className="w-3.5 h-3.5 opacity-50 group-hover:opacity-100 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
 
-            <Link 
-              to="/solutions" 
-              className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                isActive('/solutions') 
-                  ? 'text-[var(--color-brand)] bg-[var(--color-brand-light)] font-semibold' 
-                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
-              }`}
-            >
-              Solutions
-            </Link>
+                    {/* Dropdown Menu */}
+                    <div className="absolute left-0 mt-1 w-48 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform origin-top-left -translate-y-2 group-hover:translate-y-0 z-50">
+                      <div className="p-2 flex flex-col gap-1">
+                        {/* Parent link itself as an option if it has a valid URL */}
+                        {link.url && link.url !== '#' && (
+                          <Link 
+                            to={link.url}
+                            target={link.open_in_new_tab ? "_blank" : undefined}
+                            rel={link.open_in_new_tab ? "noopener noreferrer" : undefined}
+                            className={`block px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                              isActive(link.url)
+                                ? 'text-[var(--color-brand)] bg-[var(--color-brand-light)] font-semibold' 
+                                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
+                            }`}
+                          >
+                            Overview
+                          </Link>
+                        )}
+                        {children.map(child => {
+                          const subChildren = navLinks.filter(sub => sub.parent_id === child.id).sort((a,b) => a.order_index - b.order_index);
+                          
+                          if (subChildren.length > 0) {
+                            return (
+                              <div key={child.id} className="relative group/sub">
+                                <div className={`flex items-center justify-between px-3 py-2 text-sm font-medium rounded-lg transition-colors cursor-pointer ${
+                                  isActive(child.url) || subChildren.some(s => isActive(s.url))
+                                    ? 'text-[var(--color-brand)] bg-[var(--color-brand-light)] font-semibold' 
+                                    : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
+                                }`}>
+                                  {child.url ? (
+                                    <Link to={child.url} target={child.open_in_new_tab ? "_blank" : undefined} rel={child.open_in_new_tab ? "noopener noreferrer" : undefined}>
+                                      {child.label}
+                                    </Link>
+                                  ) : (
+                                    <span>{child.label}</span>
+                                  )}
+                                  <svg className="w-3.5 h-3.5 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                                  </svg>
+                                </div>
 
-            <Link 
-              to="/services" 
-              className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                isActive('/services') 
-                  ? 'text-[var(--color-brand)] bg-[var(--color-brand-light)] font-semibold' 
-                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
-              }`}
-            >
-              Services
-            </Link>
+                                {/* 3rd Level Flyout */}
+                                <div className="absolute left-full top-0 ml-1 w-48 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] shadow-xl opacity-0 invisible group-hover/sub:opacity-100 group-hover/sub:visible transition-all duration-200 z-50">
+                                  <div className="p-2 flex flex-col gap-1">
+                                    {subChildren.map(subChild => (
+                                      <Link 
+                                        key={subChild.id}
+                                        to={subChild.url}
+                                        target={subChild.open_in_new_tab ? "_blank" : undefined}
+                                        rel={subChild.open_in_new_tab ? "noopener noreferrer" : undefined}
+                                        className={`block px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                                          isActive(subChild.url)
+                                            ? 'text-[var(--color-brand)] bg-[var(--color-brand-light)] font-semibold' 
+                                            : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
+                                        }`}
+                                      >
+                                        {subChild.label}
+                                      </Link>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          }
 
-            <Link 
-              to="/products" 
-              className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                isActive('/products') 
-                  ? 'text-[var(--color-brand)] bg-[var(--color-brand-light)] font-semibold' 
-                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
-              }`}
-            >
-              Products
-            </Link>
+                          return (
+                            <Link 
+                              key={child.id}
+                              to={child.url}
+                              target={child.open_in_new_tab ? "_blank" : undefined}
+                              rel={child.open_in_new_tab ? "noopener noreferrer" : undefined}
+                              className={`block px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                                isActive(child.url)
+                                  ? 'text-[var(--color-brand)] bg-[var(--color-brand-light)] font-semibold' 
+                                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
+                              }`}
+                            >
+                              {child.label}
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                );
+              }
 
-            <Link 
-              to="/industries" 
-              className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                isActive('/industries') 
-                  ? 'text-[var(--color-brand)] bg-[var(--color-brand-light)] font-semibold' 
-                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
-              }`}
-            >
-              Industries
-            </Link>
-
-            <Link 
-              to="/projects" 
-              className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                isActive('/projects') 
-                  ? 'text-[var(--color-brand)] bg-[var(--color-brand-light)] font-semibold' 
-                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
-              }`}
-            >
-              Projects
-            </Link>
-
-            <Link 
-              to="/careers" 
-              className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                isActive('/careers') 
-                  ? 'text-[var(--color-brand)] bg-[var(--color-brand-light)] font-semibold' 
-                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
-              }`}
-            >
-              Careers
-            </Link>
-
-            <Link 
-              to="/about" 
-              className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
-                isActive('/about') 
-                  ? 'text-[var(--color-brand)] bg-[var(--color-brand-light)] font-semibold' 
-                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
-              }`}
-            >
-              About
-            </Link>
+              return (
+                <Link 
+                  key={link.id}
+                  to={link.url} 
+                  target={link.open_in_new_tab ? "_blank" : undefined}
+                  rel={link.open_in_new_tab ? "noopener noreferrer" : undefined}
+                  className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
+                    isActive(link.url) 
+                      ? 'text-[var(--color-brand)] bg-[var(--color-brand-light)] font-semibold' 
+                      : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
+                  }`}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* Desktop Right Actions (Theme Switcher + Let's Talk CTA) */}
@@ -197,30 +257,75 @@ export default function Navbar({ onOpenConsultation }) {
       {mobileMenuOpen && (
         <div className="lg:hidden glass-panel border-b border-[var(--color-border)] px-4 pt-4 pb-6 mt-3 space-y-3 animate-in slide-in-from-top duration-300">
           <div className="space-y-1">
-            <Link to="/" onClick={() => setMobileMenuOpen(false)} className={`block px-3 py-2 text-sm rounded-lg ${isActive('/') ? 'text-[var(--color-brand)] font-bold bg-[var(--color-brand-light)]' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}`}>
-              Home
-            </Link>
-            <Link to="/solutions" onClick={() => setMobileMenuOpen(false)} className={`block px-3 py-2 text-sm rounded-lg ${isActive('/solutions') ? 'text-[var(--color-brand)] font-bold bg-[var(--color-brand-light)]' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}`}>
-              Solutions
-            </Link>
-            <Link to="/services" onClick={() => setMobileMenuOpen(false)} className={`block px-3 py-2 text-sm rounded-lg ${isActive('/services') ? 'text-[var(--color-brand)] font-bold bg-[var(--color-brand-light)]' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}`}>
-              Services
-            </Link>
-            <Link to="/products" onClick={() => setMobileMenuOpen(false)} className={`block px-3 py-2 text-sm rounded-lg ${isActive('/products') ? 'text-[var(--color-brand)] font-bold bg-[var(--color-brand-light)]' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}`}>
-              Products
-            </Link>
-            <Link to="/industries" onClick={() => setMobileMenuOpen(false)} className={`block px-3 py-2 text-sm rounded-lg ${isActive('/industries') ? 'text-[var(--color-brand)] font-bold bg-[var(--color-brand-light)]' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}`}>
-              Industries
-            </Link>
-            <Link to="/projects" onClick={() => setMobileMenuOpen(false)} className={`block px-3 py-2 text-sm rounded-lg ${isActive('/projects') ? 'text-[var(--color-brand)] font-bold bg-[var(--color-brand-light)]' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}`}>
-              Projects
-            </Link>
-            <Link to="/careers" onClick={() => setMobileMenuOpen(false)} className={`block px-3 py-2 text-sm rounded-lg ${isActive('/careers') ? 'text-[var(--color-brand)] font-bold bg-[var(--color-brand-light)]' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}`}>
-              Careers
-            </Link>
-            <Link to="/about" onClick={() => setMobileMenuOpen(false)} className={`block px-3 py-2 text-sm rounded-lg ${isActive('/about') ? 'text-[var(--color-brand)] font-bold bg-[var(--color-brand-light)]' : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'}`}>
-              About
-            </Link>
+            {navLinks.filter(l => !l.parent_id).map((link) => {
+              const children = navLinks.filter(child => child.parent_id === link.id);
+              const hasChildren = children.length > 0;
+
+              return (
+                <div key={link.id}>
+                  <Link 
+                    to={link.url || '#'} 
+                    target={link.open_in_new_tab ? "_blank" : undefined}
+                    rel={link.open_in_new_tab ? "noopener noreferrer" : undefined}
+                    onClick={!hasChildren ? () => setMobileMenuOpen(false) : undefined} 
+                    className={`block px-3 py-2 text-sm rounded-lg ${
+                      isActive(link.url) && link.url !== '/' 
+                        ? 'text-[var(--color-brand)] font-bold bg-[var(--color-brand-light)]' 
+                        : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                    }`}
+                  >
+                    {link.label}
+                  </Link>
+                  {hasChildren && (
+                    <div className="pl-4 mt-1 border-l-2 border-[var(--color-border)] ml-3 space-y-1">
+                      {children.map(child => {
+                        const subChildren = navLinks.filter(sub => sub.parent_id === child.id).sort((a,b) => a.order_index - b.order_index);
+                        const hasSub = subChildren.length > 0;
+                        
+                        return (
+                          <div key={child.id}>
+                            <Link 
+                              to={child.url || '#'} 
+                              target={child.open_in_new_tab ? "_blank" : undefined}
+                              rel={child.open_in_new_tab ? "noopener noreferrer" : undefined}
+                              onClick={!hasSub ? () => setMobileMenuOpen(false) : undefined} 
+                              className={`block px-3 py-2 text-sm rounded-lg ${
+                                isActive(child.url) 
+                                  ? 'text-[var(--color-brand)] font-bold bg-[var(--color-brand-light)]' 
+                                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                              }`}
+                            >
+                              {child.label}
+                            </Link>
+                            
+                            {hasSub && (
+                              <div className="pl-4 mt-1 border-l-2 border-[var(--color-border)] ml-3 space-y-1">
+                                {subChildren.map(subChild => (
+                                  <Link 
+                                    key={subChild.id}
+                                    to={subChild.url} 
+                                    target={subChild.open_in_new_tab ? "_blank" : undefined}
+                                    rel={subChild.open_in_new_tab ? "noopener noreferrer" : undefined}
+                                    onClick={() => setMobileMenuOpen(false)} 
+                                    className={`block px-3 py-2 text-[13px] rounded-lg ${
+                                      isActive(subChild.url) 
+                                        ? 'text-[var(--color-brand)] font-bold bg-[var(--color-brand-light)]' 
+                                        : 'text-[var(--color-text-muted)] hover:text-[var(--color-text-primary)]'
+                                    }`}
+                                  >
+                                    {subChild.label}
+                                  </Link>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
 
           <div className="pt-2 border-t border-[var(--color-border)] flex flex-col gap-2">

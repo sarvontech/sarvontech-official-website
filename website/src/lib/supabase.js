@@ -132,7 +132,28 @@ export async function getLiveCareersRoles() {
 }
 
 /**
- * 7. Fetch Page Content by Slug (Inner Page Content Updator)
+ * 7. Fetch Navigation Links
+ */
+export async function getLiveNavigationLinks() {
+  try {
+    const { data, error } = await supabase
+      .from('navigation_links')
+      .select('*')
+      .eq('is_active', true)
+      .order('order_index', { ascending: true });
+
+    if (error || !data) {
+      return null;
+    }
+    return data;
+  } catch (err) {
+    console.warn('Supabase offline/unreachable for navigation_links.');
+    return null;
+  }
+}
+
+/**
+ * 8. Fetch Page Content by Slug (Inner Page Content Updator)
  */
 export async function getLivePageContent(pageSlug) {
   try {
@@ -177,6 +198,43 @@ export async function savePageContent(pageSlug, pageData) {
     return { success: true, data };
   } catch (err) {
     console.error('Error saving page content:', err);
+    throw err;
+  }
+}
+
+/**
+ * Global Settings (Custom CSS / JS) stored as a special page slug 'global-settings'
+ */
+export async function getGlobalSettings() {
+  try {
+    const { data, error } = await supabase
+      .from('page_contents')
+      .select('*')
+      .eq('slug', 'global-settings')
+      .maybeSingle();
+      
+    if (error || !data) return null;
+    return data;
+  } catch (err) {
+    return null;
+  }
+}
+
+export async function saveGlobalSettings(settingsData) {
+  try {
+    const payload = {
+      slug: 'global-settings',
+      title: 'Global Settings',
+      sections: settingsData, // Store css/js inside sections
+      updated_at: new Date().toISOString()
+    };
+    const { data, error } = await supabase
+      .from('page_contents')
+      .upsert([payload], { onConflict: 'slug' });
+    if (error) throw error;
+    return { success: true, data };
+  } catch (err) {
+    console.error('Error saving global settings:', err);
     throw err;
   }
 }

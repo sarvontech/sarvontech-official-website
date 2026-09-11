@@ -34,17 +34,38 @@ export default function AdminLayout() {
     }
   };
 
-  const navItems = [
-    { label: 'Overview', path: '/admin', icon: LayoutDashboard },
-    { label: 'Page Content Updator', path: '/admin/pages', icon: FileCode },
-    { label: 'Manage Projects', path: '/admin/projects', icon: FolderKanban },
-    { label: 'Manage Services', path: '/admin/services', icon: Wrench },
-    { label: 'Manage Solutions', path: '/admin/solutions', icon: Lightbulb },
-    { label: 'Manage Careers', path: '/admin/careers', icon: Briefcase },
-    { label: 'Client Inquiries', path: '/admin/inquiries', icon: MessageSquare },
-    { label: 'Job Applications', path: '/admin/applications', icon: Users },
-    { label: 'Manage Admin Team', path: '/admin/team', icon: UserPlus },
+  const [expandedGroups, setExpandedGroups] = React.useState({ 'Website Builder': true });
+
+  const navGroups = [
+    {
+      groupLabel: 'Core Operations',
+      items: [
+        { label: 'Overview', path: '/admin', icon: LayoutDashboard },
+        { label: 'Manage Projects', path: '/admin/projects', icon: FolderKanban },
+        { label: 'Manage Services', path: '/admin/services', icon: Wrench },
+        { label: 'Manage Solutions', path: '/admin/solutions', icon: Lightbulb },
+        { label: 'Manage Careers', path: '/admin/careers', icon: Briefcase },
+        { label: 'Client Inquiries', path: '/admin/inquiries', icon: MessageSquare },
+        { label: 'Job Applications', path: '/admin/applications', icon: Users },
+        { label: 'Manage Admin Team', path: '/admin/team', icon: UserPlus },
+      ]
+    },
+    {
+      groupLabel: 'Website Builder',
+      collapsible: true,
+      items: [
+        { label: 'Webpage', path: '/admin/pages', icon: FileCode },
+        { label: 'Menu Builder', path: '/admin/navigation', icon: Menu },
+      ]
+    }
   ];
+
+  const toggleGroup = (label) => {
+    setExpandedGroups(prev => ({
+      ...prev,
+      [label]: !prev[label]
+    }));
+  };
 
   return (
     <div className="min-h-screen bg-[var(--color-bg-primary)] text-[var(--color-text-primary)] flex flex-col md:flex-row transition-colors duration-200">
@@ -78,13 +99,13 @@ export default function AdminLayout() {
 
       {/* Sidebar Navigation */}
       <aside className={`
-        w-full md:w-64 bg-[var(--color-surface)] border-r border-[var(--color-border)] flex flex-col justify-between flex-shrink-0
+        w-full md:w-64 bg-[var(--color-surface)] border-r border-[var(--color-border)] flex flex-col justify-between flex-shrink-0 overflow-y-auto
         ${mobileOpen ? 'block' : 'hidden md:flex'}
       `}>
-        <div className="p-6 space-y-8">
+        <div className="p-6 space-y-6">
           
           {/* Logo & Status */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pb-2 border-b border-[var(--color-border)]">
             <Link to="/admin" className="flex items-center gap-3 group">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[var(--color-brand)] to-[var(--color-accent-mint)] p-0.5 shadow-md group-hover:scale-105 transition-transform">
                 <div className="w-full h-full bg-[var(--color-bg-primary)] rounded-[10px] flex items-center justify-center overflow-hidden p-1">
@@ -107,32 +128,93 @@ export default function AdminLayout() {
           </div>
 
           {/* Navigation Links */}
-          <nav className="space-y-1.5">
-            <div className="text-[10px] font-mono uppercase text-[var(--color-text-muted)] font-bold tracking-wider px-3 mb-2">
-              Core Operations
-            </div>
-            {navItems.map((item) => {
-              const Icon = item.icon;
+          <div className="space-y-6">
+            {navGroups.map((group, groupIdx) => {
+              const isExpanded = expandedGroups[group.groupLabel];
+              
+              if (group.collapsible) {
+                // Render collapsible group (e.g. Website Builder)
+                return (
+                  <div key={group.groupLabel} className="space-y-1">
+                    <button
+                      onClick={() => toggleGroup(group.groupLabel)}
+                      className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
+                        isExpanded
+                          ? 'bg-[var(--color-brand)] text-white shadow-md'
+                          : 'text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <span>{group.groupLabel}</span>
+                      </div>
+                      <span className={`transform transition-transform ${isExpanded ? 'rotate-180' : ''}`}>
+                        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </span>
+                    </button>
+
+                    {isExpanded && (
+                      <div className="pl-6 pr-2 pt-1 pb-2 space-y-1 relative">
+                        {/* Vertical line connecting children */}
+                        <div className="absolute left-[22px] top-0 bottom-4 w-px bg-[var(--color-border)] opacity-60"></div>
+                        
+                        {group.items.map((item) => {
+                          return (
+                            <NavLink
+                              key={item.path}
+                              to={item.path}
+                              onClick={() => setMobileOpen(false)}
+                              className={({ isActive }) => `
+                                relative flex items-center gap-3 px-3 py-2 rounded-lg text-xs font-medium transition-all
+                                ${isActive 
+                                  ? 'bg-[var(--color-brand-light)] text-[var(--color-brand)] border border-[var(--color-border)] shadow-sm font-bold' 
+                                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
+                                }
+                              `}
+                            >
+                              <div className="w-1.5 h-1.5 rounded-full bg-current flex-shrink-0"></div>
+                              <span>{item.label}</span>
+                            </NavLink>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              }
+
+              // Render normal flat group (Core Operations)
               return (
-                <NavLink
-                  key={item.path}
-                  to={item.path}
-                  end={item.path === '/admin'}
-                  onClick={() => setMobileOpen(false)}
-                  className={({ isActive }) => `
-                    flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all
-                    ${isActive 
-                      ? 'bg-[var(--color-brand-light)] text-[var(--color-brand)] border border-[var(--color-border)] shadow-sm font-bold' 
-                      : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
-                    }
-                  `}
-                >
-                  <Icon className="w-4 h-4" />
-                  <span>{item.label}</span>
-                </NavLink>
+                <div key={group.groupLabel} className="space-y-1.5">
+                  <div className="text-[10px] font-mono uppercase text-[var(--color-text-muted)] font-bold tracking-wider px-3 mb-2">
+                    {group.groupLabel}
+                  </div>
+                  {group.items.map((item) => {
+                    const Icon = item.icon;
+                    return (
+                      <NavLink
+                        key={item.path}
+                        to={item.path}
+                        end={item.path === '/admin'}
+                        onClick={() => setMobileOpen(false)}
+                        className={({ isActive }) => `
+                          flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all
+                          ${isActive 
+                            ? 'bg-[var(--color-brand-light)] text-[var(--color-brand)] border border-[var(--color-border)] shadow-sm font-bold' 
+                            : 'text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-surface-hover)]'
+                          }
+                        `}
+                      >
+                        <Icon className="w-4 h-4" />
+                        <span>{item.label}</span>
+                      </NavLink>
+                    );
+                  })}
+                </div>
               );
             })}
-          </nav>
+          </div>
         </div>
 
         {/* User Footer & Logout */}
