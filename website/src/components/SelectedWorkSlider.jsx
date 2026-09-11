@@ -1,10 +1,12 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { PROJECTS_DATA } from '../data/servonData';
-import { ArrowRight, ChevronLeft, ChevronRight, Sparkles } from 'lucide-react';
+import { getLiveProjects } from '../lib/supabase';
+import { ArrowRight, ChevronLeft, ChevronRight, Sparkles, Loader2 } from 'lucide-react';
 import RevealOnScroll from './RevealOnScroll';
 
 export default function SelectedWorkSlider() {
+  const [projects, setProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [activePosition, setActivePosition] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
@@ -13,11 +15,20 @@ export default function SelectedWorkSlider() {
   );
   const scrollRef = useRef(null);
 
-  const categories = ['All', ...Array.from(new Set(PROJECTS_DATA.map(p => p.category)))];
+  useEffect(() => {
+    async function load() {
+      const data = await getLiveProjects();
+      setProjects(data);
+      setLoading(false);
+    }
+    load();
+  }, []);
+
+  const categories = ['All', ...Array.from(new Set(projects.map(p => p.category)))];
 
   const filteredProjects = selectedCategory === 'All' 
-    ? PROJECTS_DATA 
-    : PROJECTS_DATA.filter(p => p.category === selectedCategory);
+    ? projects 
+    : projects.filter(p => p.category === selectedCategory);
 
   const getVisibleItems = useCallback((width) => {
     if (width < 640) return 1;
@@ -90,6 +101,14 @@ export default function SelectedWorkSlider() {
       scrollRef.current.scrollTo({ left: 0, behavior: 'smooth' });
     }
   };
+
+  if (loading) {
+    return (
+      <section className="py-20 bg-[var(--color-bg-primary)] flex justify-center items-center">
+        <Loader2 className="w-8 h-8 animate-spin text-[var(--color-brand)]" />
+      </section>
+    );
+  }
 
   return (
     <section 
@@ -182,7 +201,7 @@ export default function SelectedWorkSlider() {
           >
             {filteredProjects.map((p) => (
               <div 
-                key={p.slug}
+                key={p.slug || p.id}
                 className="w-[85vw] sm:w-[340px] lg:w-[370px] xl:w-[380px] flex-shrink-0 snap-start glass-card rounded-3xl overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-brand)] transition-all flex flex-col justify-between group/card"
               >
                 <div>

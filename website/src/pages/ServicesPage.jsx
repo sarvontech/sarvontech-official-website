@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import SEOHead from '../components/SEOHead';
-import { SERVICES_CATEGORIES } from '../data/servonData';
+import { getLiveServices } from '../lib/supabase';
 import InteractiveStorySection from '../components/InteractiveStorySection';
 import RevealOnScroll from '../components/RevealOnScroll';
 import { 
-  ArrowRight, Sparkles, ChevronRight, CheckCircle2
+  ArrowRight, Sparkles, Loader2
 } from 'lucide-react';
 
 export default function ServicesPage({ onOpenConsultation }) {
   const [selectedStory, setSelectedStory] = useState('healthcare');
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadServices() {
+      const data = await getLiveServices();
+      setServices(data);
+      setLoading(false);
+    }
+    loadServices();
+  }, []);
 
   const handleExploreService = (targetStoryId) => {
     setSelectedStory(targetStoryId);
@@ -93,54 +104,59 @@ export default function ServicesPage({ onOpenConsultation }) {
             </p>
           </div>
 
-          {/* Visual Service Cards Grid (4 cols desktop, 2 cols tablet, 1 col mobile) */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {SERVICES_CATEGORIES.map((cat, idx) => (
-              <div 
-                key={cat.id}
-                className="glass-card rounded-2xl overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-brand)] transition-all duration-300 flex flex-col justify-between group shadow-md"
-              >
-                {/* Visual Product Image (Occupies ~50% Height) */}
-                <div className="relative h-44 sm:h-48 overflow-hidden bg-[var(--color-bg-tertiary)] border-b border-[var(--color-border)]">
-                  <img 
-                    src={cat.image} 
-                    alt={cat.alt} 
-                    loading={idx < 4 ? "eager" : "lazy"}
-                    decoding="async"
-                    className="w-full h-full object-cover object-top transform group-hover:scale-[1.04] transition-transform duration-500 ease-out"
-                  />
-                  {/* Subtle Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                </div>
-
-                {/* Card Content Area (~50% Height) */}
-                <div className="p-5 flex-grow flex flex-col justify-between space-y-4">
-                  <div className="space-y-2">
-                    <span className="text-[10px] font-mono text-[var(--color-brand)] font-extrabold uppercase tracking-wider block">
-                      {cat.categoryLabel}
-                    </span>
-                    <h3 className="text-base font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-brand)] transition-colors leading-snug">
-                      {cat.title}
-                    </h3>
-                    <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
-                      {cat.shortValue}
-                    </p>
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <Loader2 className="w-10 h-10 animate-spin text-[var(--color-brand)]" />
+            </div>
+          ) : (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {services.map((cat, idx) => (
+                <div 
+                  key={cat.id}
+                  className="glass-card rounded-2xl overflow-hidden border border-[var(--color-border)] hover:border-[var(--color-brand)] transition-all duration-300 flex flex-col justify-between group shadow-md"
+                >
+                  {/* Visual Product Image (Occupies ~50% Height) */}
+                  <div className="relative h-44 sm:h-48 overflow-hidden bg-[var(--color-bg-tertiary)] border-b border-[var(--color-border)]">
+                    <img 
+                      src={cat.image} 
+                      alt={cat.alt} 
+                      loading={idx < 4 ? "eager" : "lazy"}
+                      decoding="async"
+                      className="w-full h-full object-cover object-top transform group-hover:scale-[1.04] transition-transform duration-500 ease-out"
+                    />
+                    {/* Subtle Gradient Overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
                   </div>
 
-                  {/* Clean CTA */}
-                  <div className="pt-2 border-t border-[var(--color-border-subtle)]">
-                    <button
-                      onClick={() => handleExploreService(cat.targetStory)}
-                      className="text-xs font-bold text-[var(--color-brand)] group-hover:text-[var(--color-brand-hover)] inline-flex items-center gap-1.5 transition-colors cursor-pointer"
-                    >
-                      <span>See How It Works</span>
-                      <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                    </button>
+                  {/* Card Content Area (~50% Height) */}
+                  <div className="p-5 flex-grow flex flex-col justify-between space-y-4">
+                    <div className="space-y-2">
+                      <span className="text-[10px] font-mono text-[var(--color-brand)] font-extrabold uppercase tracking-wider block">
+                        {String(idx + 1).padStart(2, '0')} &bull; {(cat.category_label || cat.categoryLabel || '').replace(/^\d+\s*\?\?\s*/, '')}
+                      </span>
+                      <h3 className="text-base font-bold text-[var(--color-text-primary)] group-hover:text-[var(--color-brand)] transition-colors leading-snug">
+                        {cat.title}
+                      </h3>
+                      <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">
+                        {cat.short_value || cat.shortValue}
+                      </p>
+                    </div>
+
+                    {/* Clean CTA */}
+                    <div className="pt-2 border-t border-[var(--color-border-subtle)]">
+                      <button
+                        onClick={() => handleExploreService(cat.targetStory || 'custom-business-systems')}
+                        className="text-xs font-bold text-[var(--color-brand)] group-hover:text-[var(--color-brand-hover)] inline-flex items-center gap-1.5 transition-colors cursor-pointer"
+                      >
+                        <span>See How It Works</span>
+                        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           {/* Bottom Optional Consultation CTA */}
           <div className="text-center pt-4">

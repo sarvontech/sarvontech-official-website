@@ -87,18 +87,23 @@ export default function ManageServices() {
     setSuccessMsg('');
 
     try {
+      const payload = { ...formData };
+      
       if (editingService) {
         const { error: updateErr } = await supabase
           .from('services')
-          .update(formData)
+          .update(payload)
           .eq('id', editingService.id);
 
         if (updateErr) throw updateErr;
         setSuccessMsg('Service card updated!');
       } else {
+        // Generate a unique category_id to prevent constraint errors
+        payload.category_id = payload.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Math.random().toString(36).substr(2, 5);
+        
         const { error: insertErr } = await supabase
           .from('services')
-          .insert([formData]);
+          .insert([payload]);
 
         if (insertErr) throw insertErr;
         setSuccessMsg('New service card added!');
@@ -168,7 +173,9 @@ export default function ManageServices() {
                 </div>
 
                 <div>
-                  <span className="text-[10px] font-mono text-[var(--color-text-muted)] uppercase font-semibold">{s.category_label}</span>
+                  <span className="text-[10px] font-mono text-[var(--color-text-muted)] uppercase font-semibold">
+                    {s.num} &bull; {(s.category_label || '').replace(/^\d+\s*\?\?\s*/, '')}
+                  </span>
                   <h3 className="font-bold text-[var(--color-text-primary)] text-base leading-tight mt-0.5">{s.title}</h3>
                   <p className="text-xs text-[var(--color-text-secondary)] line-clamp-3 mt-1.5 leading-relaxed">{s.short_value}</p>
                 </div>
@@ -222,30 +229,16 @@ export default function ManageServices() {
             )}
 
             <form onSubmit={handleSubmit} className="space-y-4 text-xs">
-              <div className="grid grid-cols-3 gap-3">
-                <div className="space-y-1">
-                  <label className="text-[var(--color-text-secondary)] font-mono">Number *</label>
-                  <input 
-                    type="text"
-                    required
-                    value={formData.num}
-                    onChange={(e) => setFormData({ ...formData, num: e.target.value })}
-                    placeholder="01"
-                    className="w-full px-3 py-2 rounded-xl bg-[var(--color-bg-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)]"
-                  />
-                </div>
-
-                <div className="col-span-2 space-y-1">
-                  <label className="text-[var(--color-text-secondary)] font-mono">Category Label *</label>
-                  <input 
-                    type="text"
-                    required
-                    value={formData.category_label}
-                    onChange={(e) => setFormData({ ...formData, category_label: e.target.value })}
-                    placeholder="Custom Web Engineering"
-                    className="w-full px-3 py-2 rounded-xl bg-[var(--color-bg-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)]"
-                  />
-                </div>
+              <div className="space-y-1">
+                <label className="text-[var(--color-text-secondary)] font-mono">Category Label *</label>
+                <input 
+                  type="text"
+                  required
+                  value={formData.category_label}
+                  onChange={(e) => setFormData({ ...formData, category_label: e.target.value })}
+                  placeholder="DIGITAL PRESENCE"
+                  className="w-full px-3 py-2 rounded-xl bg-[var(--color-bg-primary)] border border-[var(--color-border)] text-[var(--color-text-primary)]"
+                />
               </div>
 
               <div className="space-y-1">

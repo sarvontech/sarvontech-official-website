@@ -1,13 +1,45 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import SEOHead from '../components/SEOHead';
-import { PROJECTS_DATA } from '../data/servonData';
-import { ArrowRight, CheckCircle2, ChevronLeft, AlertCircle, Lightbulb, ShieldCheck, ExternalLink } from 'lucide-react';
+import { getLiveProjects } from '../lib/supabase';
+import { ArrowRight, CheckCircle2, ChevronLeft, AlertCircle, Lightbulb, ShieldCheck, ExternalLink, Loader2 } from 'lucide-react';
 import RevealOnScroll from '../components/RevealOnScroll';
 
 export default function ProjectDetailPage({ onOpenConsultation }) {
   const { slug } = useParams();
-  const project = PROJECTS_DATA.find((p) => p.slug === slug) || PROJECTS_DATA[0];
+  const [project, setProject] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadProject() {
+      try {
+        const projects = await getLiveProjects();
+        const found = projects.find((p) => p.slug === slug) || projects[0];
+        setProject(found);
+      } catch (err) {
+        console.error("Failed to load project details", err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadProject();
+  }, [slug]);
+
+  if (loading) {
+    return (
+      <div className="pt-28 pb-20 bg-[var(--color-bg-primary)] min-h-screen flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-[var(--color-brand)]" />
+      </div>
+    );
+  }
+
+  if (!project) {
+    return (
+      <div className="pt-28 pb-20 bg-[var(--color-bg-primary)] min-h-screen flex items-center justify-center">
+        <p className="text-[var(--color-text-secondary)]">Project not found.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="pt-28 pb-20 bg-[var(--color-bg-primary)] transition-colors duration-200">
@@ -88,7 +120,7 @@ export default function ProjectDetailPage({ onOpenConsultation }) {
               <AlertCircle className="w-4 h-4" />
               <span>The Challenge</span>
             </div>
-            <p className="leading-relaxed">{project.challenge}</p>
+            <p className="leading-relaxed">{project.challenge || 'Details coming soon.'}</p>
           </div>
 
           <div className="glass-card p-6 rounded-2xl border border-[var(--color-border)] space-y-2 bg-[var(--color-brand-light)]">
@@ -96,7 +128,7 @@ export default function ProjectDetailPage({ onOpenConsultation }) {
               <Lightbulb className="w-4 h-4" />
               <span>Sarvon Tech Approach</span>
             </div>
-            <p className="leading-relaxed">{project.approach}</p>
+            <p className="leading-relaxed">{project.approach || 'Details coming soon.'}</p>
           </div>
 
           <div className="glass-card p-6 rounded-2xl border border-[var(--color-card-solution-border)] space-y-2 bg-[var(--color-card-solution-bg)]">
@@ -104,7 +136,7 @@ export default function ProjectDetailPage({ onOpenConsultation }) {
               <ShieldCheck className="w-4 h-4" />
               <span>The Solution Built</span>
             </div>
-            <p className="leading-relaxed">{project.solution}</p>
+            <p className="leading-relaxed">{project.solution || 'Details coming soon.'}</p>
           </div>
 
         </RevealOnScroll>
@@ -113,34 +145,26 @@ export default function ProjectDetailPage({ onOpenConsultation }) {
         <RevealOnScroll className="glass-card rounded-3xl p-8 sm:p-10 border border-[var(--color-border)] space-y-6 shadow-xl">
           <h2 className="text-2xl font-bold text-[var(--color-text-primary)]">Key System Capabilities Delivered</h2>
           <div className="grid sm:grid-cols-2 gap-4 text-xs text-[var(--color-text-secondary)]">
-            {project.features.map((feat, idx) => (
+            {(project.features || []).map((feat, idx) => (
               <div key={idx} className="flex items-start gap-2.5 p-3 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)]">
                 <CheckCircle2 className="w-4 h-4 text-[var(--color-accent-lime)] flex-shrink-0 mt-0.5" />
                 <span>{feat}</span>
               </div>
             ))}
+            {(!project.features || project.features.length === 0) && (
+              <div className="col-span-full p-4 rounded-xl bg-[var(--color-surface)] border border-[var(--color-border)] text-[var(--color-text-muted)] italic">
+                Features will be updated soon.
+              </div>
+            )}
           </div>
         </RevealOnScroll>
 
-        {/* Technology Stack & Outcome */}
-        <RevealOnScroll className="grid md:grid-cols-2 gap-6">
-          
-          <div className="glass-card p-6 rounded-2xl border border-[var(--color-border)] space-y-3 shadow-sm">
-            <div className="text-xs font-mono text-[var(--color-text-muted)] uppercase">Technology Stack</div>
-            <div className="flex flex-wrap gap-2">
-              {project.technology.map((tech, i) => (
-                <span key={i} className="text-xs font-mono text-[var(--color-brand)] bg-[var(--color-brand-light)] px-3 py-1 rounded-lg border border-[var(--color-border)] font-semibold">
-                  {tech}
-                </span>
-              ))}
-            </div>
-          </div>
-
+        {/* Outcome */}
+        <RevealOnScroll className="grid md:grid-cols-1 gap-6">
           <div className="glass-card p-6 rounded-2xl border border-[var(--color-border)] space-y-2 shadow-sm">
             <div className="text-xs font-mono text-[var(--color-accent-mint)] uppercase font-semibold">Capability Delivered</div>
-            <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">{project.outcome}</p>
+            <p className="text-xs text-[var(--color-text-secondary)] leading-relaxed">{project.outcome || 'Success achieved.'}</p>
           </div>
-
         </RevealOnScroll>
 
         {/* Project Specific CTA */}

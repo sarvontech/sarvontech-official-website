@@ -1,15 +1,28 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import SEOHead from '../components/SEOHead';
-import { SOLUTIONS_CATEGORIES } from '../data/servonData';
-import { Globe, Database, Cpu, HeartHandshake, ArrowRight } from 'lucide-react';
+import { getLiveSolutions } from '../lib/supabase';
+import { Globe, Database, Cpu, HeartHandshake, ArrowRight, Loader2, Users } from 'lucide-react';
 
 export default function SolutionsPage({ onOpenConsultation }) {
+  const [solutions, setSolutions] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function loadSolutions() {
+      const data = await getLiveSolutions();
+      setSolutions(data);
+      setLoading(false);
+    }
+    loadSolutions();
+  }, []);
+
   const getIcon = (iconName) => {
     switch (iconName) {
       case 'Globe': return <Globe className="w-8 h-8 text-[var(--color-brand)]" />;
       case 'Database': return <Database className="w-8 h-8 text-[var(--color-brand)]" />;
       case 'Cpu': return <Cpu className="w-8 h-8 text-[var(--color-accent-mint)]" />;
       case 'HeartHandshake': return <HeartHandshake className="w-8 h-8 text-[var(--color-brand)]" />;
+      case 'Users': return <Users className="w-8 h-8 text-[var(--color-brand)]" />;
       default: return <Globe className="w-8 h-8 text-[var(--color-brand)]" />;
     }
   };
@@ -37,8 +50,13 @@ export default function SolutionsPage({ onOpenConsultation }) {
         </div>
 
         {/* Detailed Solutions Cards */}
-        <div className="space-y-12">
-          {SOLUTIONS_CATEGORIES.map((sol) => (
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <Loader2 className="w-10 h-10 animate-spin text-[var(--color-brand)]" />
+          </div>
+        ) : (
+          <div className="space-y-12">
+            {solutions.map((sol) => (
             <div 
               key={sol.id} 
               id={sol.slug}
@@ -78,15 +96,16 @@ export default function SolutionsPage({ onOpenConsultation }) {
                 <div className="space-y-2 p-5 rounded-2xl bg-[var(--color-card-solution-bg)] border border-[var(--color-card-solution-border)]">
                   <div className="font-bold text-[var(--color-card-solution-text)] text-sm">Key Deliverables</div>
                   <ul className="space-y-1 list-disc list-inside">
-                    {sol.whatWeBuild.map((item, idx) => (
+                    {(sol.whatWeBuild || []).map((item, idx) => (
                       <li key={idx}>{item}</li>
                     ))}
                   </ul>
                 </div>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
       </div>
     </div>

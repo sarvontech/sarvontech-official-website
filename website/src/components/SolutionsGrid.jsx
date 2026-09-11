@@ -1,14 +1,23 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react';
-import { SOLUTIONS_CATEGORIES } from '../data/servonData';
-import { Globe, Database, Cpu, HeartHandshake, Check, ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
+import { getLiveSolutions } from '../lib/supabase';
+import { Globe, Database, Cpu, HeartHandshake, Check, ArrowRight, ChevronLeft, ChevronRight, Users } from 'lucide-react';
 import RevealOnScroll from './RevealOnScroll';
 
 export default function SolutionsGrid({ onOpenConsultation }) {
   const scrollRef = useRef(null);
+  const [solutions, setSolutions] = useState([]);
   const [activePosition, setActivePosition] = useState(0);
   const [viewportWidth, setViewportWidth] = useState(
     typeof window !== 'undefined' ? window.innerWidth : 1200
   );
+
+  useEffect(() => {
+    async function loadSolutions() {
+      const data = await getLiveSolutions();
+      setSolutions(data);
+    }
+    loadSolutions();
+  }, []);
 
   const getIcon = (iconName) => {
     switch (iconName) {
@@ -16,6 +25,7 @@ export default function SolutionsGrid({ onOpenConsultation }) {
       case 'Database': return <Database className="w-6 h-6 text-[var(--color-brand)]" />;
       case 'Cpu': return <Cpu className="w-6 h-6 text-[var(--color-accent-mint)]" />;
       case 'HeartHandshake': return <HeartHandshake className="w-6 h-6 text-[var(--color-brand)]" />;
+      case 'Users': return <Users className="w-6 h-6 text-[var(--color-brand)]" />;
       default: return <Globe className="w-6 h-6 text-[var(--color-brand)]" />;
     }
   };
@@ -26,7 +36,7 @@ export default function SolutionsGrid({ onOpenConsultation }) {
     return 3;
   }, []);
 
-  const totalItems = SOLUTIONS_CATEGORIES.length;
+  const totalItems = solutions.length;
   const visibleItems = getVisibleItems(viewportWidth);
   const totalPositions = Math.max(1, totalItems - visibleItems + 1);
 
@@ -129,7 +139,7 @@ export default function SolutionsGrid({ onOpenConsultation }) {
               msOverflowStyle: 'none'
             }}
           >
-            {SOLUTIONS_CATEGORIES.map((cat) => (
+            {solutions.map((cat) => (
               <div 
                 key={cat.id}
                 className="w-[85vw] sm:w-[340px] lg:w-[370px] xl:w-[390px] flex-shrink-0 snap-start glass-card rounded-3xl p-6 sm:p-8 flex flex-col justify-between border border-[var(--color-border)] hover:border-[var(--color-brand)] transition-all duration-300 group"
@@ -140,7 +150,7 @@ export default function SolutionsGrid({ onOpenConsultation }) {
                       {getIcon(cat.icon)}
                     </div>
                     <span className="text-[10px] font-mono text-[var(--color-brand)] bg-[var(--color-brand-light)] px-2.5 py-1 rounded-full border border-[var(--color-border)] font-semibold">
-                      {cat.shortTitle}
+                      {cat.shortTitle || cat.short_title}
                     </span>
                   </div>
 
@@ -155,7 +165,7 @@ export default function SolutionsGrid({ onOpenConsultation }) {
                   </div>
 
                   <div className="space-y-2 pt-1">
-                    {cat.points.map((pt, idx) => (
+                    {(cat.points || []).map((pt, idx) => (
                       <div key={idx} className="flex items-start gap-2 text-xs text-[var(--color-text-secondary)]">
                         <div className="w-3.5 h-3.5 rounded-full bg-[var(--color-brand-light)] text-[var(--color-brand)] flex items-center justify-center flex-shrink-0 mt-0.5">
                           <Check className="w-2.5 h-2.5" />
