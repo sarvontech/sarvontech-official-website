@@ -119,6 +119,8 @@ const STYLE_GROUPS = [
   }
 ];
 
+import Editor from '@monaco-editor/react';
+
 export default function PropertiesSidebar({ selectedBlock, updateBlock, onClose, onRemove }) {
   if (!selectedBlock) return null;
 
@@ -131,6 +133,10 @@ export default function PropertiesSidebar({ selectedBlock, updateBlock, onClose,
         [propName]: value
       }
     });
+  };
+
+  const handleHtmlContentChange = (value) => {
+    updateBlock(selectedBlock.id, { content: value });
   };
 
   return (
@@ -162,7 +168,31 @@ export default function PropertiesSidebar({ selectedBlock, updateBlock, onClose,
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-thin scrollbar-thumb-slate-700">
+      <div className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-thin scrollbar-thumb-slate-700 flex flex-col">
+        {selectedBlock.type === 'html' && (
+          <div className="space-y-2 mb-4 flex-shrink-0 min-h-[250px] border border-slate-700 rounded-xl overflow-hidden bg-[#1e1e1e] flex flex-col">
+            <div className="p-2 border-b border-white/10 bg-[#252526] text-xs font-bold text-slate-300 uppercase tracking-widest flex items-center justify-between">
+              <span>HTML Source</span>
+            </div>
+            <div className="flex-1 relative">
+              <Editor
+                height="100%"
+                defaultLanguage="html"
+                theme="vs-dark"
+                value={selectedBlock.content || ''}
+                onChange={(value) => handleHtmlContentChange(value || '')}
+                options={{
+                  minimap: { enabled: false },
+                  fontSize: 12,
+                  wordWrap: 'on',
+                  padding: { top: 8, bottom: 8 },
+                  scrollBeyondLastLine: false,
+                }}
+              />
+            </div>
+          </div>
+        )}
+
         {STYLE_GROUPS.map((group) => {
           // Hide Image Specific group if not image/video
           if (group.title === 'Image Specific' && !['image', 'video'].includes(selectedBlock.type)) return null;

@@ -230,92 +230,149 @@ export default function DynamicPage({ onOpenConsultation }) {
   );
 }
 
+function HTMLBlockExecutor({ html, styles }) {
+  const containerRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!containerRef.current) return;
+    const scripts = containerRef.current.querySelectorAll('script');
+    scripts.forEach(oldScript => {
+      const newScript = document.createElement('script');
+      Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+      newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+      oldScript.parentNode.replaceChild(newScript, oldScript);
+    });
+  }, [html]);
+
+  return (
+    <div 
+      ref={containerRef}
+      style={styles || {}}
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+}
+
 function BlockRenderer({ block, allBlocks }) {
-  if (block.type === 'row') {
-    const cols = Math.max(1, Math.min(12, block.props?.cols || 1));
-    
-    const gridClasses = {
-      1: 'grid-cols-1',
-      2: 'grid-cols-1 md:grid-cols-2',
-      3: 'grid-cols-1 md:grid-cols-3',
-      4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
-      5: 'grid-cols-1 md:grid-cols-3 lg:grid-cols-5',
-      6: 'grid-cols-1 md:grid-cols-3 lg:grid-cols-6',
-      7: 'grid-cols-1 md:grid-cols-4 lg:grid-cols-7',
-      8: 'grid-cols-1 md:grid-cols-4 lg:grid-cols-8',
-      9: 'grid-cols-1 md:grid-cols-3 lg:grid-cols-9',
-      10: 'grid-cols-1 md:grid-cols-5 lg:grid-cols-10',
-      11: 'grid-cols-1 md:grid-cols-4 lg:grid-cols-11',
-      12: 'grid-cols-1 md:grid-cols-4 lg:grid-cols-12',
-    };
+  const renderContent = () => {
+    if (block.type === 'row') {
+      const cols = Math.max(1, Math.min(12, block.props?.cols || 1));
+      
+      const gridClasses = {
+        1: 'grid-cols-1',
+        2: 'grid-cols-1 md:grid-cols-2',
+        3: 'grid-cols-1 md:grid-cols-3',
+        4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
+        5: 'grid-cols-1 md:grid-cols-3 lg:grid-cols-5',
+        6: 'grid-cols-1 md:grid-cols-3 lg:grid-cols-6',
+        7: 'grid-cols-1 md:grid-cols-4 lg:grid-cols-7',
+        8: 'grid-cols-1 md:grid-cols-4 lg:grid-cols-8',
+        9: 'grid-cols-1 md:grid-cols-3 lg:grid-cols-9',
+        10: 'grid-cols-1 md:grid-cols-5 lg:grid-cols-10',
+        11: 'grid-cols-1 md:grid-cols-4 lg:grid-cols-11',
+        12: 'grid-cols-1 md:grid-cols-4 lg:grid-cols-12',
+      };
 
-    return (
-      <div className={`grid gap-6 ${gridClasses[cols]}`}>
-        {Array.from({ length: cols }).map((_, idx) => {
-          const colId = `${block.id}-col${idx}`;
-          const colItems = (allBlocks || []).filter(b => b.parentId === colId);
-          return (
-            <div key={colId} className="flex flex-col gap-4">
-              {colItems.map(b => (
-                <BlockRenderer key={b.id} block={b} allBlocks={allBlocks} />
-              ))}
-            </div>
-          );
-        })}
-      </div>
-    );
-  }
-  
-  if (block.type === 'container') {
-    const containerId = `${block.id}-content`;
-    const containerItems = (allBlocks || []).filter(b => b.parentId === containerId);
-    return (
-      <div className="container mx-auto px-4 w-full">
-        {containerItems.map(b => (
-          <BlockRenderer key={b.id} block={b} allBlocks={allBlocks} />
-        ))}
-      </div>
-    );
-  }
+      return (
+        <div className={`grid gap-4 ${gridClasses[cols]}`}>
+          {Array.from({ length: cols }).map((_, idx) => {
+            const colId = `${block.id}-col${idx}`;
+            const colItems = allBlocks.filter(b => b.parentId === colId);
+            return (
+              <div key={colId} className="w-full">
+                {colItems.map(b => (
+                  <BlockRenderer key={b.id} block={b} allBlocks={allBlocks} />
+                ))}
+              </div>
+            );
+          })}
+        </div>
+      );
+    }
 
-  switch (block.type) {
-    case 'heading':
-      const Tag = `h${block.props?.level || 2}`;
-      return <Tag style={block.styles || {}} className={`font-bold text-[var(--color-text-primary)] ${block.props?.level === 1 ? 'text-4xl lg:text-6xl mb-6' : block.props?.level === 2 ? 'text-3xl lg:text-4xl mb-4' : 'text-2xl mb-3'} ${block.props?.align === 'center' ? 'text-center' : ''}`}>{block.content}</Tag>;
-    case 'paragraph':
-      return <p style={block.styles || {}} className={`text-lg text-[var(--color-text-secondary)] whitespace-pre-wrap leading-relaxed ${block.props?.align === 'center' ? 'text-center' : ''}`}>{block.content}</p>;
-    case 'image':
+    if (block.type === 'container') {
+      const containerId = `${block.id}-content`;
+      const containerItems = allBlocks.filter(b => b.parentId === containerId);
       return (
-        <div style={{ ...block.styles, filter: undefined, objectFit: undefined }} className="rounded-2xl overflow-hidden border border-[var(--color-border)] shadow-md my-8">
-          <img src={block.content} alt={block.props?.alt || 'Image block'} style={{ objectFit: block.styles?.objectFit, filter: block.styles?.filter }} className="w-full h-auto object-cover" />
-        </div>
-      );
-    case 'video':
-      return (
-        <div style={block.styles || {}} className="aspect-video rounded-2xl overflow-hidden border border-[var(--color-border)] shadow-md my-8">
-          <iframe src={block.content} className="w-full h-full" allowFullScreen />
-        </div>
-      );
-    case 'button':
-      return (
-        <div className={`py-4 ${block.props?.align === 'center' ? 'text-center' : ''}`}>
-          <a style={block.styles || {}} href={block.props?.url || '#'} className="px-6 py-3 rounded-xl bg-[var(--color-brand)] text-white font-bold inline-block hover:bg-[var(--color-brand-hover)] transition-colors">
-            {block.content}
-          </a>
-        </div>
-      );
-    case 'list':
-      const ListTag = block.props?.ordered ? 'ol' : 'ul';
-      return (
-        <ListTag style={block.styles || {}} className={`space-y-2 pl-6 ${block.props?.ordered ? 'list-decimal' : 'list-disc'} text-lg text-[var(--color-text-secondary)]`}>
-          {(block.content || []).map((item, idx) => (
-            <li key={idx}>{item}</li>
+        <div className="container mx-auto px-4">
+          {containerItems.map(b => (
+            <BlockRenderer key={b.id} block={b} allBlocks={allBlocks} />
           ))}
-        </ListTag>
+        </div>
       );
-    default:
-      return null;
-  }
+    }
+
+    switch (block.type) {
+      case 'heading':
+        const Tag = `h${block.props?.level || 2}`;
+        return (
+          <Tag 
+            style={block.styles || {}}
+            className={`font-bold text-[var(--color-text-primary)] ${block.props?.level === 1 ? 'text-4xl lg:text-6xl mb-6' : block.props?.level === 2 ? 'text-3xl lg:text-4xl mb-4' : 'text-2xl mb-3'} ${block.props?.align === 'center' ? 'text-center' : ''}`}
+          >
+            {block.content}
+          </Tag>
+        );
+      case 'paragraph':
+        return (
+          <p 
+            style={block.styles || {}}
+            className={`text-lg text-[var(--color-text-secondary)] whitespace-pre-wrap leading-relaxed ${block.props?.align === 'center' ? 'text-center' : ''}`}
+          >
+            {block.content}
+          </p>
+        );
+      case 'image':
+        return (
+          <img 
+            src={block.content || 'https://via.placeholder.com/800x400?text=Placeholder+Image'} 
+            alt={block.props?.alt || 'Image'} 
+            className="w-full h-auto object-cover rounded-2xl shadow-md my-8" 
+            style={block.styles || {}}
+          />
+        );
+      case 'video':
+        return (
+          <div style={block.styles || {}} className="aspect-video rounded-2xl overflow-hidden shadow-md my-8">
+            {block.content && (
+              <iframe src={block.content} className="w-full h-full" allowFullScreen />
+            )}
+          </div>
+        );
+      case 'button':
+        return (
+          <div className={`py-4 ${block.props?.align === 'center' ? 'text-center' : ''}`}>
+            <a 
+              href={block.props?.url || '#'}
+              style={block.styles || {}}
+              className="px-6 py-3 rounded-xl bg-[var(--color-brand)] text-white font-bold inline-block hover:opacity-90 transition-opacity"
+            >
+              {block.content || 'Button'}
+            </a>
+          </div>
+        );
+      case 'list':
+        const ListTag = block.props?.ordered ? 'ol' : 'ul';
+        return (
+          <ListTag style={block.styles || {}} className={`space-y-2 pl-6 ${block.props?.ordered ? 'list-decimal' : 'list-disc'} text-lg text-[var(--color-text-secondary)]`}>
+            {(block.content || []).map((item, idx) => (
+              <li key={idx}>{item}</li>
+            ))}
+          </ListTag>
+        );
+      case 'html':
+        return (
+          <HTMLBlockExecutor 
+            html={block.content || ''} 
+            styles={block.styles || {}} 
+          />
+        );
+      default:
+        return null;
+    }
+  };
+
+  return renderContent();
 }
 
 function SparkleIcon() {

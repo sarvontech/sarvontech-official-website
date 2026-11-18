@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getLivePageContent, savePageContent, getGlobalSettings, saveGlobalSettings } from '../../lib/supabase';
-import { ArrowLeft, Save, Loader2, AlertCircle, CheckCircle, X, Trash2, GripVertical, Code } from 'lucide-react';
+import { ArrowLeft, Save, Loader2, AlertCircle, CheckCircle, X, Trash2, GripVertical, Code, Undo2, Redo2 } from 'lucide-react';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragOverlay, useDroppable } from '@dnd-kit/core';
 
 // Create a Droppable Canvas wrapper
@@ -21,6 +21,31 @@ import AIBuilderSidebar from './components/AIBuilderSidebar';
 import PropertiesSidebar from './components/PropertiesSidebar';
 
 const HARDCODED_PAGES = ['home', 'solutions', 'services', 'products', 'industries', 'projects', 'careers', 'about', 'contact'];
+
+// Component to properly execute scripts injected via innerHTML
+function HTMLBlockExecutor({ html, styles }) {
+  const containerRef = React.useRef(null);
+
+  React.useEffect(() => {
+    if (!containerRef.current) return;
+    const scripts = containerRef.current.querySelectorAll('script');
+    scripts.forEach(oldScript => {
+      const newScript = document.createElement('script');
+      Array.from(oldScript.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
+      newScript.appendChild(document.createTextNode(oldScript.innerHTML));
+      oldScript.parentNode.replaceChild(newScript, oldScript);
+    });
+  }, [html]);
+
+  return (
+    <div 
+      ref={containerRef}
+      style={styles || {}}
+      className="min-h-[50px] outline-none"
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
+}
 
 // Generate unique IDs for blocks
 const generateId = () => Math.random().toString(36).substr(2, 9);
@@ -318,6 +343,15 @@ function SortableBlock({ block, allBlocks, updateBlock, removeBlock, openDialog,
             </div>
           </div>
         );
+      case 'html':
+        return (
+          <div className="relative group">
+            <HTMLBlockExecutor 
+              html={block.content || '<div style="padding: 20px; background: #f0f0f0; color: #333; text-align: center;">HTML Block (Edit in Properties)</div>'} 
+              styles={block.styles || {}} 
+            />
+          </div>
+        );
       default:
         return <div className="p-4 bg-red-100 text-red-600">Unknown block type</div>;
     }
@@ -355,6 +389,35 @@ export default function VisualPageBuilder() {
   const [successMsg, setSuccessMsg] = useState('');
   
   const [blocks, setBlocks] = useState([]);
+  const [past, setPast] = useState([]);
+  const [future, setFuture] = useState([]);
+
+  const updateBlocksWithHistory = (newBlocksOrUpdater) => {
+    setBlocks((currentBlocks) => {
+      const nextBlocks = typeof newBlocksOrUpdater === 'function' ? newBlocksOrUpdater(currentBlocks) : newBlocksOrUpdater;
+      if (JSON.stringify(currentBlocks) !== JSON.stringify(nextBlocks)) {
+        setPast((prev) => [...prev, currentBlocks]);
+        setFuture([]);
+      }
+      return nextBlocks;
+    });
+  };
+
+  const handleUndo = () => {
+    if (past.length === 0) return;
+    const previous = past[past.length - 1];
+    setPast((prev) => prev.slice(0, prev.length - 1));
+    setFuture((prev) => [blocks, ...prev]);
+    setBlocks(previous);
+  };
+
+  const handleRedo = () => {
+    if (future.length === 0) return;
+    const next = future[0];
+    setFuture((prev) => prev.slice(1));
+    setPast((prev) => [...prev, blocks]);
+    setBlocks(next);
+  };
   const [pageData, setPageData] = useState(null);
   
   const [activeDragId, setActiveDragId] = useState(null);
@@ -362,9 +425,7 @@ export default function VisualPageBuilder() {
   const [selectedBlockId, setSelectedBlockId] = useState(null);
 
   const [dialogConfig, setDialogConfig] = useState({ isOpen: false });
-  const [isGlobalCodeOpen, setIsGlobalCodeOpen] = useState(false);
   const [globalCss, setGlobalCss] = useState('');
-  const [globalJs, setGlobalJs] = useState('');
 
   const openDialog = (options) => {
     setDialogConfig({ ...options, isOpen: true });
@@ -393,12 +454,20 @@ export default function VisualPageBuilder() {
     try {
       const data = await getLivePageContent(pageSlug);
       const globalData = await getGlobalSettings();
-      if (globalData && globalData.sections) {
-        setGlobalCss(globalData.sections.css || '');
-        setGlobalJs(globalData.sections.js || '');
+      if (globalData && globalData.sections && globalData.sections.css) {
+        setGlobalCss(globalData.sections.css);
       }
       setPageData(data);
-      if (data && data.sections && data.sections.blocks) {
+      
+      const draftStr = localStorage.getItem(`builder_draft_${pageSlug}`);
+      if (draftStr) {
+        try {
+          const draftBlocks = JSON.parse(draftStr);
+          setBlocks(draftBlocks);
+        } catch (e) {
+          setBlocks(data?.sections?.blocks || []);
+        }
+      } else if (data && data.sections && data.sections.blocks) {
         setBlocks(data.sections.blocks);
       } else {
         setBlocks([]);
@@ -409,6 +478,13 @@ export default function VisualPageBuilder() {
       setLoading(false);
     }
   };
+
+  // Auto-save draft when blocks change
+  useEffect(() => {
+    if (!loading) {
+      localStorage.setItem(`builder_draft_${pageSlug}`, JSON.stringify(blocks));
+    }
+  }, [blocks, pageSlug, loading]);
 
   const handleSaveAndPublish = async () => {
     setSaving(true);
@@ -423,6 +499,7 @@ export default function VisualPageBuilder() {
           blocks
         }
       });
+      localStorage.removeItem(`builder_draft_${pageSlug}`);
       setSuccessMsg(`Page changes published live to website!`);
       setTimeout(() => setSuccessMsg(''), 3000);
     } catch (err) {
@@ -465,6 +542,7 @@ export default function VisualPageBuilder() {
       if (type === 'paragraph') newBlock.content = 'Start typing your paragraph here...';
       if (type === 'button') { newBlock.content = 'Click Me'; newBlock.props = { url: '#' }; }
       if (type === 'list') { newBlock.content = ['Item 1', 'Item 2']; }
+      if (type === 'html') { newBlock.content = '<div class="custom-html-block">\n  <h1>Hello World</h1>\n</div>'; }
 
       let targetParentId = null;
       let insertIndex = blocks.length;
@@ -486,7 +564,7 @@ export default function VisualPageBuilder() {
 
       newBlock.parentId = targetParentId;
 
-      setBlocks((items) => {
+      updateBlocksWithHistory((items) => {
         const newItems = [...items];
         if (insertIndex < newItems.length) {
           newItems.splice(insertIndex, 0, newBlock);
@@ -500,7 +578,7 @@ export default function VisualPageBuilder() {
 
     // Reordering within Canvas or moving between lists
     if (active.id !== over.id && over.id !== 'canvas-droppable') {
-      setBlocks((items) => {
+      updateBlocksWithHistory((items) => {
         const activeIndex = items.findIndex((i) => i.id === active.id);
         const overIndex = items.findIndex((i) => i.id === over.id);
         
@@ -541,7 +619,7 @@ export default function VisualPageBuilder() {
       });
     } else if (over.id === 'canvas-droppable' && active.id !== over.id) {
        // Moving back to main canvas
-       setBlocks((items) => {
+       updateBlocksWithHistory((items) => {
         const activeIndex = items.findIndex((i) => i.id === active.id);
         if (activeIndex === -1) return items;
         const newItems = [...items];
@@ -555,7 +633,7 @@ export default function VisualPageBuilder() {
   };
 
   const updateBlock = (id, newProps) => {
-    setBlocks(blocks.map(b => b.id === id ? { ...b, ...newProps } : b));
+    updateBlocksWithHistory(blocks.map(b => b.id === id ? { ...b, ...newProps } : b));
   };
 
   const removeBlock = (id) => {
@@ -565,7 +643,7 @@ export default function VisualPageBuilder() {
       message: 'Are you sure you want to delete this block? This cannot be undone.',
       danger: true,
       onConfirm: () => {
-        setBlocks(blocks.filter(b => b.id !== id));
+        updateBlocksWithHistory(blocks.filter(b => b.id !== id));
       }
     });
   };
@@ -594,6 +672,18 @@ export default function VisualPageBuilder() {
           const colBlocks = block.children[i] || [];
           colBlocks.forEach(child => processBlock(child, colId));
         }
+      } else if (block.type === 'container' && block.children) {
+        processedBlocks.push({
+          id,
+          type: 'container',
+          parentId,
+          props: block.props || {},
+          styles: block.styles || {}
+        });
+
+        const containerId = `${id}-content`;
+        const containerBlocks = block.children || [];
+        containerBlocks.forEach(child => processBlock(child, containerId));
       } else {
         // Standard block
         processedBlocks.push({
@@ -609,23 +699,9 @@ export default function VisualPageBuilder() {
 
     aiBlocks.forEach(b => processBlock(b, null));
 
-    setBlocks([...blocks, ...processedBlocks]);
+    updateBlocksWithHistory([...blocks, ...processedBlocks]);
     setSuccessMsg('AI generated section added successfully!');
     setTimeout(() => setSuccessMsg(''), 3000);
-  };
-
-  const handleSaveGlobalCode = async () => {
-    setSaving(true);
-    try {
-      await saveGlobalSettings({ css: globalCss, js: globalJs });
-      setIsGlobalCodeOpen(false);
-      setSuccessMsg('Global CSS/JS saved successfully!');
-      setTimeout(() => setSuccessMsg(''), 3000);
-    } catch (err) {
-      setError('Failed to save global code.');
-    } finally {
-      setSaving(false);
-    }
   };
 
   if (isHardcoded) {
@@ -665,13 +741,26 @@ export default function VisualPageBuilder() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <button
-              onClick={() => setIsGlobalCodeOpen(true)}
-              className="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white font-bold text-xs shadow-lg transition-all flex items-center gap-2 cursor-pointer"
-            >
-              <Code className="w-4 h-4" />
-              <span>Global CSS/JS</span>
-            </button>
+            <div className="flex items-center bg-[#1F2937] rounded-xl border border-slate-700 overflow-hidden mr-2">
+              <button
+                onClick={handleUndo}
+                disabled={past.length === 0}
+                title="Undo"
+                className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+              >
+                <Undo2 className="w-4 h-4" />
+              </button>
+              <div className="w-px h-5 bg-slate-700"></div>
+              <button
+                onClick={handleRedo}
+                disabled={future.length === 0}
+                title="Redo"
+                className="p-2 text-slate-400 hover:text-white hover:bg-slate-700 disabled:opacity-30 disabled:hover:bg-transparent transition-colors"
+              >
+                <Redo2 className="w-4 h-4" />
+              </button>
+            </div>
+            
             <button
               onClick={handleSaveAndPublish}
               disabled={saving}
@@ -713,6 +802,7 @@ export default function VisualPageBuilder() {
                 </div>
               ) : (
                 <SortableContext items={blocks.filter(b => !b.parentId).map(b => b.id)} strategy={verticalListSortingStrategy}>
+                  {globalCss && <style dangerouslySetInnerHTML={{ __html: globalCss }} />}
                   <div className="space-y-4 min-h-[500px]">
                     {blocks.filter(b => !b.parentId).map(block => (
                       <SortableBlock 
@@ -774,51 +864,6 @@ export default function VisualPageBuilder() {
       </DragOverlay>
 
       <CustomDialog config={dialogConfig} onClose={closeDialog} />
-
-      {/* GLOBAL CODE MODAL */}
-      {isGlobalCodeOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm">
-          <div className="bg-[#1F2937] border border-slate-700 p-6 rounded-2xl shadow-2xl w-full max-w-2xl animate-in fade-in zoom-in duration-200">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold text-white flex items-center gap-2">
-                <Code className="w-5 h-5 text-teal-500" />
-                Global Custom Code
-              </h3>
-              <button onClick={() => setIsGlobalCodeOpen(false)} className="text-slate-400 hover:text-white"><X className="w-5 h-5"/></button>
-            </div>
-            <p className="text-sm text-slate-400 mb-4">These styles and scripts will be injected across all public pages.</p>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Global CSS</label>
-                <textarea 
-                  value={globalCss}
-                  onChange={(e) => setGlobalCss(e.target.value)}
-                  className="w-full h-32 bg-[#111827] border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 font-mono text-sm"
-                  placeholder="body { background-color: #000; }"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-bold text-slate-400 uppercase mb-2">Global JS</label>
-                <textarea 
-                  value={globalJs}
-                  onChange={(e) => setGlobalJs(e.target.value)}
-                  className="w-full h-32 bg-[#111827] border border-slate-700 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-teal-500 font-mono text-sm"
-                  placeholder="console.log('Hello World!');"
-                />
-              </div>
-            </div>
-            
-            <div className="flex justify-end gap-3 mt-6">
-              <button type="button" onClick={() => setIsGlobalCodeOpen(false)} className="px-4 py-2 text-slate-400 hover:text-white transition-colors">Cancel</button>
-              <button onClick={handleSaveGlobalCode} disabled={saving} className="px-6 py-2 text-white font-bold rounded-xl shadow-lg transition-colors bg-teal-600 hover:bg-teal-500 disabled:opacity-50 flex items-center gap-2">
-                {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-                Save Globally
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
 
     </DndContext>
   );

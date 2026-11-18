@@ -16,7 +16,8 @@ import {
   Sun, 
   Moon, 
   Menu, 
-  X
+  X,
+  Code
 } from 'lucide-react';
 
 export default function AdminLayout() {
@@ -56,6 +57,7 @@ export default function AdminLayout() {
       items: [
         { label: 'Webpage', path: '/admin/pages', icon: FileCode },
         { label: 'Menu Builder', path: '/admin/navigation', icon: Menu },
+        { label: 'Global Code', path: '/admin/global-code', icon: Code },
       ]
     }
   ];

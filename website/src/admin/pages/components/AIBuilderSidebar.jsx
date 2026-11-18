@@ -6,17 +6,22 @@ export default function AIBuilderSidebar({ onGenerate }) {
   const [prompt, setPrompt] = useState('');
   const [generating, setGenerating] = useState(false);
   const [error, setError] = useState('');
+  const [history, setHistory] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
     
+    const userMessage = { role: 'user', content: prompt };
+    setHistory([...history, userMessage]);
+    
     setGenerating(true);
     setError('');
     
     try {
-      const blocks = await generateAIBlocks(prompt);
+      const blocks = await generateAIBlocks(prompt, history);
       onGenerate(blocks);
+      setHistory(prev => [...prev, { role: 'ai', content: JSON.stringify(blocks) }]);
       setPrompt('');
     } catch (err) {
       console.error(err);
@@ -33,10 +38,23 @@ export default function AIBuilderSidebar({ onGenerate }) {
         <h3 className="text-xs font-bold text-slate-100 uppercase tracking-widest font-mono">AI Section Builder</h3>
       </div>
       
-      <div className="flex-1 overflow-y-auto p-4 space-y-4 flex flex-col justify-end bg-slate-900/50">
+      <div className="flex-1 overflow-y-auto p-4 space-y-4 flex flex-col bg-slate-900/50">
         <div className="p-3 bg-slate-800 rounded-xl text-sm text-slate-300 border border-slate-700 shadow-sm self-start max-w-[90%]">
-          Hello! I can build full sections for you. Try asking me to "Create a 3-item FAQ section" or "Add a Hero section with a button".
+          Hello! I can build full sections for you. Try asking me to "Create a 3-item FAQ section" or "Add a Hero section with a button". If I make a mistake, just tell me what to fix!
         </div>
+        
+        {history.map((msg, idx) => (
+          msg.role === 'user' ? (
+            <div key={idx} className="p-3 bg-teal-900/50 rounded-xl text-sm text-teal-100 border border-teal-500/30 self-end max-w-[90%]">
+              {msg.content}
+            </div>
+          ) : (
+             <div key={idx} className="p-3 bg-slate-800 rounded-xl text-xs text-slate-400 border border-slate-700 shadow-sm self-start max-w-[90%]">
+               [Generated Blocks]
+             </div>
+          )
+        ))}
+
         {generating && (
           <div className="p-3 bg-teal-500/10 rounded-xl text-sm text-teal-300 border border-teal-500/30 self-start max-w-[90%] flex items-center gap-2">
             <Loader2 className="w-4 h-4 animate-spin" />

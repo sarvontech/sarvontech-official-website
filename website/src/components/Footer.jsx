@@ -33,7 +33,7 @@ export default function Footer({ onOpenConsultation }) {
               </a>
               <div className="flex items-center gap-2 text-[var(--color-text-secondary)]">
                 <Phone className="w-4 h-4 text-[var(--color-accent-mint)]" />
-                <span>+91 98348 57370</span>
+                <span>+91 9405788688</span>
               </div>
             </div>
           </div>

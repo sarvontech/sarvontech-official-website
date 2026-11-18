@@ -31,6 +31,11 @@ export default class ErrorBoundary extends React.Component {
             <p className="text-xs text-slate-400 leading-relaxed">
               Required production environment variables are missing or unconfigured. Please contact the administrator to verify deployment configuration.
             </p>
+            <div className="bg-red-900/50 p-4 rounded text-left overflow-auto max-h-48 text-xs text-red-200">
+              {this.state.error && this.state.error.toString()}
+              <br/>
+              {this.state.error && this.state.error.componentStack}
+            </div>
 
             <div className="pt-2">
               <button
