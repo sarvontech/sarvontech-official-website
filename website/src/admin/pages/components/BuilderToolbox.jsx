@@ -14,6 +14,7 @@ const ELEMENTS = [
   { id: 'toolbox-video', type: 'video', label: 'Video', icon: Video },
   { id: 'toolbox-button', type: 'button', label: 'Button', icon: Hand },
   { id: 'toolbox-list', type: 'list', label: 'List', icon: LayoutList },
+  { id: 'toolbox-html', type: 'html', label: 'HTML Code', icon: Code },
 ];
 
 function ToolboxItem({ element }) {

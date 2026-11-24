@@ -36,6 +36,7 @@ import ManageInquiries from './admin/pages/ManageInquiries';
 import ViewApplications from './admin/pages/ViewApplications';
 import ManageAdmins from './admin/pages/ManageAdmins';
 import ManageNavigation from './admin/pages/ManageNavigation';
+import GlobalCodePage from './admin/pages/GlobalCodePage';
 
 import { getGlobalSettings } from './lib/supabase';
 
@@ -52,14 +53,23 @@ function AppContent() {
       if (globalData && globalData.sections) {
         // Inject CSS
         if (globalData.sections.css) {
-          const style = document.createElement('style');
+          let style = document.getElementById('global-custom-css');
+          if (!style) {
+            style = document.createElement('style');
+            style.id = 'global-custom-css';
+            document.head.appendChild(style);
+          }
           style.innerHTML = globalData.sections.css;
-          document.head.appendChild(style);
         }
         // Inject JS
         if (globalData.sections.js) {
-          const script = document.createElement('script');
-          script.innerHTML = globalData.sections.js;
+          let script = document.getElementById('global-custom-js');
+          if (script) script.remove();
+          
+          script = document.createElement('script');
+          script.id = 'global-custom-js';
+          // Wrap in IIFE and try/catch to prevent user code from crashing the app
+          script.innerHTML = `(function(){ try { \n${globalData.sections.js}\n } catch(e) { console.error('Global JS Error:', e); } })();`;
           document.body.appendChild(script);
         }
       }
@@ -115,6 +125,7 @@ function AppContent() {
               <Route path="services" element={<ManageServices />} />
               <Route path="solutions" element={<ManageSolutions />} />
               <Route path="navigation" element={<ManageNavigation />} />
+              <Route path="global-code" element={<GlobalCodePage />} />
               <Route path="careers" element={<ManageCareers />} />
               <Route path="inquiries" element={<ManageInquiries />} />
               <Route path="applications" element={<ViewApplications />} />
