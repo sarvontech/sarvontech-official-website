@@ -27,9 +27,9 @@ export default function Footer({ onOpenConsultation }) {
             </p>
 
             <div className="text-xs space-y-1.5 pt-2">
-              <a href="mailto:sarvon.tech@gmail.com" className="flex items-center gap-2 text-[var(--color-text-secondary)] hover:text-[var(--color-brand)] transition-colors">
+              <a href="mailto:info@sarvontech.in" className="flex items-center gap-2 text-[var(--color-text-secondary)] hover:text-[var(--color-brand)] transition-colors">
                 <Mail className="w-4 h-4 text-[var(--color-brand)]" />
-                <span>sarvon.tech@gmail.com</span>
+                <span>info@sarvontech.in</span>
               </a>
               <div className="flex items-center gap-2 text-[var(--color-text-secondary)]">
                 <Phone className="w-4 h-4 text-[var(--color-accent-mint)]" />
